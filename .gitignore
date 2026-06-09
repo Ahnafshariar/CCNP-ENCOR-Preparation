@@ -1,12 +1,21 @@
-### Windows
-# Windows thumbnail cache files
+# EVE-NG specific files that shouldn't be committed
+*.qcow2
+*.iso
+*.log
+*.pcap
+*.cap
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
 Thumbs.db
 
-# Folder config file
-[Dd]esktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows shortcuts
-*.lnk
+# Keep images and configs - we want those!
+# Only ignore large binary images if needed
+# *.png
+# *.jpg
