@@ -34,20 +34,26 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 
 > ENCOR moved to **v1.2 on 19 Mar 2026**. Wireless coverage was reduced and **Automation rose to 15%**. This portfolio tracks the v1.2 blueprint.
 
-| # | Domain | Weight | Progress | Status |
-|---|--------|:------:|----------|:------:|
-| 1.0 | Architecture | `15%` | `░░░░░░░░░░` 0% | ⬜ |
-| 2.0 | Virtualization | `10%` | `░░░░░░░░░░` 0% | ⬜ |
-| 3.0 | **Infrastructure** | `30%` | `▓▓░░░░░░░░` 20% | 🟨 |
-| 4.0 | Network Assurance | `10%` | `░░░░░░░░░░` 0% | ⬜ |
-| 5.0 | Security | `20%` | `░░░░░░░░░░` 0% | ⬜ |
-| 6.0 | Automation & AI | `15%` | `░░░░░░░░░░` 0% | ⬜ |
+**Overall readiness: 🟨 ~6%**
 
-**Overall readiness** `▓░░░░░░░░░` ~6% · detailed tracker → [`PROGRESS.md`](PROGRESS.md)
+| # | Domain | Weight | Progress |
+|---|--------|:------:|:--------:|
+| 1.0 | Architecture | 15% | ⬜ 0% |
+| 2.0 | Virtualization | 10% | ⬜ 0% |
+| 3.0 | **Infrastructure** | 30% | 🟨 20% |
+| 4.0 | Network Assurance | 10% | ⬜ 0% |
+| 5.0 | Security | 20% | ⬜ 0% |
+| 6.0 | Automation & AI | 15% | ⬜ 0% |
+
+`⬜ not started · 🟨 in progress · 🟩 solid` — to update, just change the emoji and number. Detailed tracker → [`PROGRESS.md`](PROGRESS.md)
 
 ---
 
-## 🗺️ Base lab topology
+## 🗺️ Current lab topology
+
+> 🔁 This topology **evolves as the labs progress** — the diagram below reflects the most recent lab. Each new lab updates this section to match the topology used for it.
+
+**Currently shown: Lab 01 — VLAN + 802.1Q Trunk**
 
 ```mermaid
 graph LR
@@ -63,7 +69,7 @@ graph LR
 | **SW1 / SW2** | IOSv-L2 switches | `e0/0` 802.1Q trunk · native VLAN 100 · allowed 10,20 |
 | **VPC1–4** | End hosts | VLAN 10 / 20 · `/27` subnets |
 
-*This base topology is fixed; future labs extend it without changing the core.*
+*Each lab folder also documents its own topology, so the full history stays intact as the network grows.*
 
 ---
 
@@ -161,16 +167,17 @@ graph LR
 
 ![CCNA](https://img.shields.io/badge/Cisco-CCNA-1BA0D7?style=flat-square&logo=cisco&logoColor=white)
 ![ISC2 CC](https://img.shields.io/badge/ISC2-CC-3A5BA0?style=flat-square)
-![CISSP](https://img.shields.io/badge/ISC2-CISSP-00563F?style=flat-square)
+![Associate of ISC2](https://img.shields.io/badge/Associate%20of%20(ISC)%C2%B2-CISSP%20exam%20passed-00563F?style=flat-square)
+![SentinelOne](https://img.shields.io/badge/SentinelOne-IR%20Engineer-6B4FBB?style=flat-square)
 
 ---
 
 ## 🤝 Connect
 
-> _Replace the `#` links with your profiles before publishing._
+> _Lets connect and learn together._
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Learning%20in%20Public-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](#)
-[![Medium](https://img.shields.io/badge/Medium-DevOps%20%26%20Networking-000000?style=flat-square&logo=medium&logoColor=white)](#)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Learning%20in%20Public-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/ahnaf-shariar-meraz)
+[![Medium](https://img.shields.io/badge/Medium-DevOps%20%26%20Networking-000000?style=flat-square&logo=medium&logoColor=white)](https://medium.com/@ahnafshariar482)
 
 ---
 

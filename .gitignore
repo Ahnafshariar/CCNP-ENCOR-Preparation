@@ -1,21 +1,62 @@
-# EVE-NG specific files that shouldn't be committed
+# ============================================================
+#  Cisco images — NEVER COMMIT (licensed binaries, do not redistribute)
+# ============================================================
+*.bin
+*.image
+*.iol
+*.iou
 *.qcow2
-*.iso
-*.log
+*.vmdk
+*.ova
+*.tar.gz
+i86bi*
+vios*
+iosv*
+viosl2*
+csr1000v*
+
+# ============================================================
+#  Packet captures & large lab artifacts
+# ============================================================
 *.pcap
-*.cap
+*.pcapng
+wireshark*/
 
-# Temporary files
-*.tmp
-*.swp
-*.swo
-*~
+# ============================================================
+#  Secrets / credentials — NEVER COMMIT
+# ============================================================
+.env
+*.env
+secrets*
+credentials*
+*_rsa
+*_rsa.pub
+*.pem
 
-# OS files
+# ============================================================
+#  OS / editor junk
+# ============================================================
 .DS_Store
 Thumbs.db
+desktop.ini
+*.swp
+*~
+.vscode/
+.idea/
 
-# Keep images and configs - we want those!
-# Only ignore large binary images if needed
-# *.png
-# *.jpg
+# ============================================================
+#  Python (for automation labs)
+# ============================================================
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Auto-sync log lives in TEMP, but ignore here too just in case
+sync.log
+ccnp-sync.log
+
+# Local-only automation — runs on your PC, not on GitHub. Not published.
+scripts/sync.ps1
+# NOTE: tools/update_index.py is intentionally NOT ignored — GitHub Actions
+# runs it server-side, so it must stay committed for CI to work.
