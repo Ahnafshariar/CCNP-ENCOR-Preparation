@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<lab name="Basic VLAN Config" version="1" scripttimeout="300" lock="0">
+  <topology>
+    <nodes>
+      <node id="3" name="VPC3" type="vpcs" template="vpcs" image="" ethernet="1" delay="0" icon="Desktop.png" config="0" left="303" top="519">
+        <interface id="0" name="eth0" type="ethernet" network_id="2"/>
+      </node>
+      <node id="4" name="VPC4" type="vpcs" template="vpcs" image="" ethernet="1" delay="0" icon="Desktop.png" config="0" left="558" top="522">
+        <interface id="0" name="eth0" type="ethernet" network_id="4"/>
+      </node>
+      <node id="5" name="VPC5" type="vpcs" template="vpcs" image="" ethernet="1" delay="0" icon="Desktop.png" config="0" left="411" top="522">
+        <interface id="0" name="eth0" type="ethernet" network_id="3"/>
+      </node>
+      <node id="6" name="VPC6" type="vpcs" template="vpcs" image="" ethernet="1" delay="0" icon="Desktop.png" config="0" left="657" top="522">
+        <interface id="0" name="eth0" type="ethernet" network_id="5"/>
+      </node>
+      <node id="7" name="SW1" type="iol" template="iol" image="L2-ADVENTERPRISE-M-15.1-20140814.bin" ethernet="1" nvram="1024" ram="1024" serial="0" console="" delay="0" icon="Router.png" config="1" left="318" top="381">
+        <interface id="0" name="e0/0" type="ethernet" network_id="1"/>
+        <interface id="16" name="e0/1" type="ethernet" network_id="2"/>
+        <interface id="32" name="e0/2" type="ethernet" network_id="3"/>
+      </node>
+      <node id="8" name="SW2" type="iol" template="iol" image="L2-ADVENTERPRISE-M-15.1-20140814.bin" ethernet="1" nvram="1024" ram="1024" serial="0" console="" delay="0" icon="Router.png" config="1" left="648" top="381">
+        <interface id="0" name="e0/0" type="ethernet" network_id="1"/>
+        <interface id="16" name="e0/1" type="ethernet" network_id="4"/>
+        <interface id="32" name="e0/2" type="ethernet" network_id="5"/>
+      </node>
+    </nodes>
+    <networks>
+      <network id="1" type="bridge" name="Net-SW7iface_0" left="1776" top="313" visibility="0"/>
+      <network id="2" type="bridge" name="Net-VPC3iface_0" left="948" top="727" visibility="0"/>
+      <network id="3" type="bridge" name="Net-VPC5iface_0" left="1134" top="724" visibility="0"/>
+      <network id="4" type="bridge" name="Net-VPC4iface_0" left="1272" top="736" visibility="0"/>
+      <network id="5" type="bridge" name="Net-VPC6iface_0" left="1452" top="736" visibility="0"/>
+    </networks>
+  </topology>
+  <objects>
+    <configs>
+      <config id="7">CiEKISBMYXN0IGNvbmZpZ3VyYXRpb24gY2hhbmdlIGF0IDE4OjI1OjI0IEVFVCBNb24gSnVuIDggMjAyNgohCnZlcnNpb24gMTUuMQpzZXJ2aWNlIHRpbWVzdGFtcHMgZGVidWcgZGF0ZXRpbWUgbXNlYwpzZXJ2aWNlIHRpbWVzdGFtcHMgbG9nIGRhdGV0aW1lIG1zZWMKbm8gc2VydmljZSBwYXNzd29yZC1lbmNyeXB0aW9uCnNlcnZpY2UgY29tcHJlc3MtY29uZmlnCiEKaG9zdG5hbWUgU1cxCiEKYm9vdC1zdGFydC1tYXJrZXIKYm9vdC1lbmQtbWFya2VyCiEKIQohCm5vIGFhYSBuZXctbW9kZWwKY2xvY2sgdGltZXpvbmUgRUVUIDIgMAohCmlwIGNlZgohCiEKbm8gaXB2NiBjZWYKaXB2NiBtdWx0aWNhc3QgcnBmIHVzZS1iZ3AKIQohCiEKIQohCiEKIQpzcGFubmluZy10cmVlIG1vZGUgcHZzdApzcGFubmluZy10cmVlIGV4dGVuZCBzeXN0ZW0taWQKIQohCiEKIQp2bGFuIGludGVybmFsIGFsbG9jYXRpb24gcG9saWN5IGFzY2VuZGluZwohCiEgCiEKIQohCiEKIQohCiEKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzAKIG5vIHNodXRkb3duCiBzd2l0Y2hwb3J0IHRydW5rIGVuY2Fwc3VsYXRpb24gZG90MXEKIHN3aXRjaHBvcnQgdHJ1bmsgbmF0aXZlIHZsYW4gMTAwCiBzd2l0Y2hwb3J0IHRydW5rIGFsbG93ZWQgdmxhbiAxMAogZHVwbGV4IGF1dG8KIQppbnRlcmZhY2UgRXRoZXJuZXQwLzEKIG5vIHNodXRkb3duCiBzd2l0Y2hwb3J0IGFjY2VzcyB2bGFuIDIwCiBzd2l0Y2hwb3J0IG1vZGUgYWNjZXNzCiBkdXBsZXggYXV0bwohCmludGVyZmFjZSBFdGhlcm5ldDAvMgogbm8gc2h1dGRvd24KIGR1cGxleCBhdXRvCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8zCiBubyBzaHV0ZG93bgogZHVwbGV4IGF1dG8KIQohCm5vIGlwIGh0dHAgc2VydmVyCiEKIQohCiEKIQpjb250cm9sLXBsYW5lCiEKIQpsaW5lIGNvbiAwCiBsb2dnaW5nIHN5bmNocm9ub3VzCmxpbmUgYXV4IDAKbGluZSB2dHkgMCA0CiBsb2dpbgohCmVuZAo=</config>
+      <config id="8">CiEKISBMYXN0IGNvbmZpZ3VyYXRpb24gY2hhbmdlIGF0IDE4OjE3OjM2IEVFVCBNb24gSnVuIDggMjAyNgohCnZlcnNpb24gMTUuMQpzZXJ2aWNlIHRpbWVzdGFtcHMgZGVidWcgZGF0ZXRpbWUgbXNlYwpzZXJ2aWNlIHRpbWVzdGFtcHMgbG9nIGRhdGV0aW1lIG1zZWMKbm8gc2VydmljZSBwYXNzd29yZC1lbmNyeXB0aW9uCnNlcnZpY2UgY29tcHJlc3MtY29uZmlnCiEKaG9zdG5hbWUgU1cyCiEKYm9vdC1zdGFydC1tYXJrZXIKYm9vdC1lbmQtbWFya2VyCiEKIQohCm5vIGFhYSBuZXctbW9kZWwKY2xvY2sgdGltZXpvbmUgRUVUIDIgMAohCmlwIGNlZgohCiEKbm8gaXB2NiBjZWYKaXB2NiBtdWx0aWNhc3QgcnBmIHVzZS1iZ3AKIQohCiEKIQohCiEKIQpzcGFubmluZy10cmVlIG1vZGUgcHZzdApzcGFubmluZy10cmVlIGV4dGVuZCBzeXN0ZW0taWQKIQohCiEKIQp2bGFuIGludGVybmFsIGFsbG9jYXRpb24gcG9saWN5IGFzY2VuZGluZwohCiEgCiEKIQohCiEKIQohCiEKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzAKIG5vIHNodXRkb3duCiBzd2l0Y2hwb3J0IHRydW5rIGVuY2Fwc3VsYXRpb24gZG90MXEKIHN3aXRjaHBvcnQgdHJ1bmsgbmF0aXZlIHZsYW4gMTAwCiBzd2l0Y2hwb3J0IHRydW5rIGFsbG93ZWQgdmxhbiAxMCwyMAogZHVwbGV4IGF1dG8KIQppbnRlcmZhY2UgRXRoZXJuZXQwLzEKIG5vIHNodXRkb3duCiBzd2l0Y2hwb3J0IGFjY2VzcyB2bGFuIDIwCiBzd2l0Y2hwb3J0IG1vZGUgYWNjZXNzCiBkdXBsZXggYXV0bwohCmludGVyZmFjZSBFdGhlcm5ldDAvMgogbm8gc2h1dGRvd24KIGR1cGxleCBhdXRvCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8zCiBubyBzaHV0ZG93bgogZHVwbGV4IGF1dG8KIQohCm5vIGlwIGh0dHAgc2VydmVyCiEKIQohCiEKIQpjb250cm9sLXBsYW5lCiEKIQpsaW5lIGNvbiAwCiBsb2dnaW5nIHN5bmNocm9ub3VzCmxpbmUgYXV4IDAKbGluZSB2dHkgMCA0CiBsb2dpbgohCmVuZAo=</config>
+    </configs>
+  </objects>
+</lab>
