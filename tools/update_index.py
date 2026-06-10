@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Regenerate the lab index table in README.md by scanning labs/*/README.md.
+"""Auto-maintain the README.
 
-Pulls the H1 title and the "ENCOR v1.2 mapping" line from each lab and rewrites
-the table between the LAB-INDEX markers. Idempotent and safe to run anytime.
+1. Lab index  : scans labs/*/README.md -> table between LAB-INDEX markers.
+2. Repo tree  : walks the repo -> folder tree between REPO-TREE markers.
+
+Both are idempotent and safe to run anytime. CI runs this on every push.
 """
 import re
 import pathlib
@@ -10,13 +12,16 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 LABS = ROOT / "labs"
 README = ROOT / "README.md"
-START = "<!-- LAB-INDEX:START -->"
-END = "<!-- LAB-INDEX:END -->"
+
+INDEX_START, INDEX_END = "<!-- LAB-INDEX:START -->", "<!-- LAB-INDEX:END -->"
+TREE_START, TREE_END = "<!-- REPO-TREE:START -->", "<!-- REPO-TREE:END -->"
+SKIP = {".git", "__pycache__", "node_modules", ".pytest_cache", ".gitkeep", ".DS_Store"}
+MAX_DEPTH = 2  # how many levels deep to show in the tree
 
 
+# ---------- lab index ----------
 def lab_meta(readme: pathlib.Path):
-    title = readme.parent.name
-    domain = "—"
+    title, domain = readme.parent.name, "—"
     text = readme.read_text(encoding="utf-8")
     for line in text.splitlines():
         if line.startswith("# "):
@@ -41,17 +46,41 @@ def build_table():
     return "| Lab | Domain |\n|-----|--------|\n" + "\n".join(rows)
 
 
-def main():
-    block = f"{START}\n{build_table()}\n{END}"
-    content = README.read_text(encoding="utf-8")
-    if START in content and END in content:
-        content = re.sub(
-            re.escape(START) + r".*?" + re.escape(END), block, content, flags=re.S
+# ---------- repo tree ----------
+def build_tree(root: pathlib.Path, max_depth: int = MAX_DEPTH):
+    lines = [root.name + "/"]
+
+    def walk(d, prefix, depth):
+        entries = sorted(
+            (e for e in d.iterdir() if e.name not in SKIP),
+            key=lambda p: (p.is_file(), p.name.lower()),
         )
-    else:
-        content = content.rstrip() + "\n\n## Lab index\n\n" + block + "\n"
+        for i, e in enumerate(entries):
+            last = i == len(entries) - 1
+            branch = "└── " if last else "├── "
+            lines.append(f"{prefix}{branch}{e.name}{'/' if e.is_dir() else ''}")
+            if e.is_dir() and depth < max_depth:
+                walk(e, prefix + ("    " if last else "│   "), depth + 1)
+
+    walk(root, "", 1)
+    return "\n".join(lines)
+
+
+# ---------- shared writer ----------
+def replace_block(content, start, end, body):
+    if start in content and end in content:
+        return re.sub(re.escape(start) + r".*?" + re.escape(end),
+                      f"{start}\n{body}\n{end}", content, flags=re.S)
+    return content
+
+
+def main():
+    content = README.read_text(encoding="utf-8")
+    content = replace_block(content, INDEX_START, INDEX_END, build_table())
+    content = replace_block(content, TREE_START, TREE_END,
+                            f"```\n{build_tree(ROOT)}\n```")
     README.write_text(content, encoding="utf-8")
-    print("Lab index updated.")
+    print("README lab index + repo tree updated.")
 
 
 if __name__ == "__main__":
