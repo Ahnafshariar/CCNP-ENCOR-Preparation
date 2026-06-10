@@ -53,21 +53,32 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 
 > 🔁 This topology **evolves as the labs progress** — the diagram below reflects the most recent lab. Each new lab updates this section to match the topology used for it.
 
-**Currently shown: Lab 01 — VLAN + 802.1Q Trunk**
+**Currently shown: Lab 02 — Inter-VLAN Routing (Router-on-a-Stick)**
 
 ```mermaid
-graph LR
-    VPC1["VPC1 · VLAN 10<br/>192.168.10.240/27"] --- SW1
-    VPC2["VPC2 · VLAN 20<br/>192.168.20.240/27"] --- SW1
-    SW1["🖧 SW1<br/>IOSv-L2"] ===|"802.1Q Trunk<br/>native VLAN 100 · allowed 10,20"| SW2["🖧 SW2<br/>IOSv-L2"]
-    SW2 --- VPC3["VPC3 · VLAN 10<br/>192.168.10.241/27"]
-    SW2 --- VPC4["VPC4 · VLAN 20<br/>192.168.20.241/27"]
+graph TD
+    CORE["Core RT (router)<br/>Gi0/0 802.1Q trunk<br/>.10=192.168.1.1 · .20=192.168.2.1 · .30=192.168.3.1"]
+    AGG["AGG SW<br/>L2 · VLANs 10,20,30"]
+    ACC1["ACC SW1<br/>VLAN 10"]
+    ACC2["ACC SW2<br/>VLAN 20"]
+    ACC3["ACC SW3<br/>VLAN 30"]
+    H1["Host<br/>192.168.1.10"]
+    H2["Host<br/>192.168.2.10"]
+    H3["Host<br/>192.168.3.10"]
+    CORE ===|"trunk 10,20,30"| AGG
+    AGG ===|"trunk 10"| ACC1
+    AGG ===|"trunk 20"| ACC2
+    AGG ===|"trunk 30"| ACC3
+    ACC1 --- H1
+    ACC2 --- H2
+    ACC3 --- H3
 ```
 
 | Device | Role | Key configuration |
 |--------|------|-------------------|
-| **SW1 / SW2** | IOSv-L2 switches | `e0/0` 802.1Q trunk · native VLAN 100 · allowed 10,20 |
-| **VPC1–4** | End hosts | VLAN 10 / 20 · `/27` subnets |
+| **CORE-RT** | Router | `Gi0/0` 802.1Q subinterfaces = per-VLAN gateways |
+| **AGG-SW** | L2 aggregation | trunks VLANs 10/20/30 between core and access |
+| **ACC-SW1/2/3** | L2 access | one VLAN each (10/20/30) to its host |
 
 *Each lab folder also documents its own topology, so the full history stays intact as the network grows.*
 
@@ -115,6 +126,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | Lab | Domain |
 |-----|--------|
 | [Lab 01 — Basic VLAN Configuration + 802.1Q Trunk](labs/lab-01-vlan-trunk/) | 3.0 Infrastructure → Layer 2 (VLANs, trunking, 802.1Q) |
+| [Lab 02 - Inter-VLAN Routing (Router-on-a-Stick)](labs/lab-02-inter-vlan-routing/) | 3.0 Infrastructure |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added — see below.*
@@ -173,8 +185,6 @@ graph LR
 ---
 
 ## 🤝 Connect
-
-> _Lets connect and learn together._
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Learning%20in%20Public-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/ahnaf-shariar-meraz)
 [![Medium](https://img.shields.io/badge/Medium-DevOps%20%26%20Networking-000000?style=flat-square&logo=medium&logoColor=white)](https://medium.com/@ahnafshariar482)

@@ -28,7 +28,7 @@ Status key: ⬜ Not started · 🟨 In progress · ✅ Solid · 🔁 Needs revie
 | Lab | Title | Domain map | Status | Repo path |
 |-----|-------|------------|:------:|-----------|
 | 01 | Basic VLAN + 802.1Q Trunk | 3.0 Infrastructure (L2) | ✅ | `labs/lab-01-vlan-trunk/` |
-| 02 | _(next — STP root election & port roles, or EtherChannel)_ | 3.0 Infrastructure (L2) | ⬜ | – |
+| 02 | Inter-VLAN Routing (Router-on-a-Stick) | 3.0 Infrastructure (L2+L3) | ✅ | `labs/lab-02-inter-vlan-routing/` |
 | 03 | _(planned)_ | – | ⬜ | – |
 
 > Every lab folder must contain: objective, topology, addressing table, full config, **verification commands with expected output**, troubleshooting section, and ENCOR v1.2 blueprint mapping.
