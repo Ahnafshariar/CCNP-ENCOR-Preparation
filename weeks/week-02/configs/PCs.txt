@@ -1,0 +1,11 @@
+! End hosts (VPCS)  [AS-BUILT]
+! Cleaner form uses an explicit mask/prefix; both work in VPCS:
+PC6>  ip 192.168.1.10/24 192.168.1.1
+PC7>  ip 192.168.2.10/24 192.168.2.1
+PC8>  ip 192.168.3.10/24 192.168.3.1
+
+! To save config just write save 
+
+PC6> save
+
+

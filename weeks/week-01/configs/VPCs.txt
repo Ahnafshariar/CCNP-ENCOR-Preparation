@@ -1,0 +1,6 @@
+! End hosts (VPCS) - Week 01 / Lab 01
+! NOTE: no router in this lab, so the gateway is unused; set for correctness only.
+VPC1>  ip 192.168.10.240/27 192.168.10.254
+VPC2>  ip 192.168.20.240/27 192.168.20.254
+VPC3>  ip 192.168.10.241/27 192.168.10.254
+VPC4>  ip 192.168.20.241/27 192.168.20.254

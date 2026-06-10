@@ -1,0 +1,28 @@
+! ==========================================================
+!  SW1  (IOSv-L2)  - Week 01 / Lab 01  [VLAN + 802.1Q Trunk]
+!  e0/0 = trunk to SW2 ; e0/1 = VPC3 (v10) ; e0/2 = VPC4 (v20)
+! ==========================================================
+hostname SW2
+!
+vlan 10
+ name VLAN10
+vlan 20
+ name VLAN20
+vlan 100
+ name NATIVE
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 100
+ switchport trunk allowed vlan 10,20
+ switchport mode trunk
+!
+interface Ethernet0/1
+ switchport mode access
+ switchport access vlan 10
+!
+interface Ethernet0/2
+ switchport mode access
+ switchport access vlan 20
+!
+end
