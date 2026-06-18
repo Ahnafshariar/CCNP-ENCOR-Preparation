@@ -34,13 +34,13 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 
 > ENCOR moved to **v1.2 on 19 Mar 2026**. Wireless coverage was reduced and **Automation rose to 15%**. This portfolio tracks the v1.2 blueprint.
 
-**Overall readiness: 🟨 ~6%**
+**Overall readiness: 🟨 ~10%**
 
 | # | Domain | Weight | Progress |
 |---|--------|:------:|:--------:|
 | 1.0 | Architecture | 15% | ⬜ 0% |
 | 2.0 | Virtualization | 10% | ⬜ 0% |
-| 3.0 | **Infrastructure** | 30% | 🟨 20% |
+| 3.0 | **Infrastructure** | 30% | 🟨 30% |
 | 4.0 | Network Assurance | 10% | ⬜ 0% |
 | 5.0 | Security | 20% | ⬜ 0% |
 | 6.0 | Automation & AI | 15% | ⬜ 0% |
@@ -53,32 +53,30 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 
 > 🔁 This topology **evolves as the labs progress** — the diagram below reflects the most recent lab. Each new lab updates this section to match the topology used for it.
 
-**Currently shown: Lab 02 — Inter-VLAN Routing (Router-on-a-Stick)**
+**Currently shown: Lab 03 — Static Routing with Path Control**
 
 ```mermaid
 graph TD
-    CORE["Core RT (router)<br/>Gi0/0 802.1Q trunk<br/>.10=192.168.1.1 · .20=192.168.2.1 · .30=192.168.3.1"]
-    AGG["AGG SW<br/>L2 · VLANs 10,20,30"]
-    ACC1["ACC SW1<br/>VLAN 10"]
-    ACC2["ACC SW2<br/>VLAN 20"]
-    ACC3["ACC SW3<br/>VLAN 30"]
-    H1["Host<br/>192.168.1.10"]
-    H2["Host<br/>192.168.2.10"]
-    H3["Host<br/>192.168.3.10"]
-    CORE ===|"trunk 10,20,30"| AGG
-    AGG ===|"trunk 10"| ACC1
-    AGG ===|"trunk 20"| ACC2
-    AGG ===|"trunk 30"| ACC3
-    ACC1 --- H1
-    ACC2 --- H2
-    ACC3 --- H3
+    VPC5["VPC5<br/>192.168.10.100/24"]
+    R2["R2<br/>e0/2=192.168.10.1<br/>e0/0=20.1.1.1 · e0/1=10.1.1.1"]
+    R1["R1<br/>e0/0=20.1.1.2 · e0/1=20.1.1.5"]
+    R3["R3<br/>e0/0=10.1.1.2 · e0/1=10.1.1.5"]
+    R4["R4<br/>e0/0=10.1.1.6 · e0/1=20.1.1.6<br/>e0/2=192.168.20.1"]
+    VPC6["VPC6<br/>192.168.20.100/24"]
+    VPC5 --- R2
+    R2 ---|"20.1.1.0/30<br/>(top path)"| R1
+    R1 ---|"20.1.1.4/30<br/>(top path)"| R4
+    R2 ---|"10.1.1.0/30<br/>(bottom path)"| R3
+    R3 ---|"10.1.1.4/30<br/>(bottom path)"| R4
+    R4 --- VPC6
 ```
 
 | Device | Role | Key configuration |
 |--------|------|-------------------|
-| **CORE-RT** | Router | `Gi0/0` 802.1Q subinterfaces = per-VLAN gateways |
-| **AGG-SW** | L2 aggregation | trunks VLANs 10/20/30 between core and access |
-| **ACC-SW1/2/3** | L2 access | one VLAN each (10/20/30) to its host |
+| **R1** | Transit (top path) | forwards between R2 and R4 via 20.1.1.x |
+| **R2** | Left edge / VPC5 GW | static routes select path to 192.168.20.0/24 |
+| **R3** | Transit (bottom path) | forwards between R2 and R4 via 10.1.1.x |
+| **R4** | Right edge / VPC6 GW | static routes select path to 192.168.10.0/24 |
 
 *Each lab folder also documents its own topology, so the full history stays intact as the network grows.*
 
@@ -90,7 +88,7 @@ graph TD
 
 <!-- REPO-TREE:START -->
 ```
-CCNP-ENCOR-Preparation/
+ccnp-encor-portfolio/
 ├── .github/
 │   └── workflows/
 ├── lab-environment/
@@ -98,7 +96,8 @@ CCNP-ENCOR-Preparation/
 │   └── iou-web/
 ├── labs/
 │   ├── lab-01-vlan-trunk/
-│   └── lab-02-inter-vlan-routing/
+│   ├── lab-02-inter-vlan-routing/
+│   └── lab-03-static-routing/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -106,11 +105,14 @@ CCNP-ENCOR-Preparation/
 │   ├── 04-network-assurance/
 │   ├── 05-security/
 │   └── 06-automation/
+├── scripts/
+│   └── sync.ps1
 ├── tools/
 │   └── update_index.py
 ├── weeks/
 │   ├── week-01/
-│   └── week-02/
+│   ├── week-02/
+│   └── week-03/
 ├── .gitignore
 ├── .markdownlint.json
 ├── PROGRESS.md
@@ -129,6 +131,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 |-----|--------|
 | [Lab 01 — Basic VLAN Configuration + 802.1Q Trunk](labs/lab-01-vlan-trunk/) | 3.0 Infrastructure → Layer 2 (VLANs, trunking, 802.1Q) |
 | [Lab 02 - Inter-VLAN Routing (Router-on-a-Stick)](labs/lab-02-inter-vlan-routing/) | 3.0 Infrastructure |
+| [Lab 03 — Static Routing with Path Control](labs/lab-03-static-routing/) | 3.0 Infrastructure |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added — see below.*
@@ -150,16 +153,15 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 
 ```mermaid
 graph LR
-    A["✏️ I edit notes / configs"] --> B["⏱️ Hourly auto-sync<br/>(sync.ps1)"]
+    A["✏️ I edit notes / configs"] --> B["⏱️ Auto-sync<br/>(sync.ps1)"]
     B --> C["⬆️ git push"]
     C --> D["🤖 GitHub Actions CI"]
-    D --> E["✅ Markdown lint"]
-    D --> F["🔄 Rebuild lab index"]
+    D --> F["🔄 Rebuild lab index + repo tree"]
     F --> C
 ```
 
-- **Auto-sync** — `scripts/sync.ps1` runs hourly via Task Scheduler: rebase, commit, push. I just edit; the repo keeps itself current.
-- **CI pipeline** — `.github/workflows/ci.yml` lints Markdown and regenerates the lab index on every push.
+- **Auto-sync** — `scripts/sync.ps1` runs via Task Scheduler: rebase, commit, push. I just edit; the repo keeps itself current.
+- **CI pipeline** — `.github/workflows/ci.yml` regenerates the lab index and repo tree on every push.
 
 ---
 
@@ -167,9 +169,10 @@ graph LR
 
 | Phase | Focus | Domains |
 |-------|-------|---------|
-| 🟢 **Now** | L2 — VLANs, trunking, STP, EtherChannel | 3.0 |
-| ⬜ Next | L3 — OSPF, BGP, redistribution, NAT | 3.0 |
-| ⬜ | Network assurance + IP services | 3.0 / 4.0 |
+| ✅ Done | L2 — VLANs, trunking, inter-VLAN routing | 3.0 |
+| ✅ Done | L3 — Static routing, path control | 3.0 |
+| 🟢 **Now** | L3 — OSPF, BGP, redistribution | 3.0 |
+| ⬜ Next | STP, EtherChannel, NAT, IP services | 3.0 / 4.0 |
 | ⬜ | Security — ACLs, CoPP, AAA, hardening | 5.0 |
 | ⬜ | Virtualization + Architecture | 1.0 / 2.0 |
 | ⬜ | Automation & AI — Python, JSON/YAML, EEM, REST | 6.0 |
