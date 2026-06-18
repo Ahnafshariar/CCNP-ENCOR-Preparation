@@ -98,7 +98,8 @@ CCNP-ENCOR-Preparation/
 │   └── iou-web/
 ├── labs/
 │   ├── lab-01-vlan-trunk/
-│   └── lab-02-inter-vlan-routing/
+│   ├── lab-02-inter-vlan-routing/
+│   └── lab-03-static-routing/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -108,6 +109,12 @@ CCNP-ENCOR-Preparation/
 │   └── 06-automation/
 ├── tools/
 │   └── update_index.py
+├── week-02/
+│   ├── configs/
+│   └── README.md
+├── week-03/
+│   ├── configs/
+│   └── README.md
 ├── weeks/
 │   ├── week-01/
 │   └── week-02/
@@ -129,6 +136,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 |-----|--------|
 | [Lab 01 — Basic VLAN Configuration + 802.1Q Trunk](labs/lab-01-vlan-trunk/) | 3.0 Infrastructure → Layer 2 (VLANs, trunking, 802.1Q) |
 | [Lab 02 - Inter-VLAN Routing (Router-on-a-Stick)](labs/lab-02-inter-vlan-routing/) | 3.0 Infrastructure |
+| [Lab 03 — Static Routing with Path Control](labs/lab-03-static-routing/) | 3.0 Infrastructure |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added — see below.*
