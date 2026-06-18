@@ -109,6 +109,12 @@ ccnp-encor-portfolio/
 │   └── sync.ps1
 ├── tools/
 │   └── update_index.py
+├── week-02/
+│   ├── configs/
+│   └── README.md
+├── week-03/
+│   ├── configs/
+│   └── README.md
 ├── weeks/
 │   ├── week-01/
 │   ├── week-02/
