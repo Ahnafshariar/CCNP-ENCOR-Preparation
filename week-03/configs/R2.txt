@@ -1,0 +1,25 @@
+! ==========================================================
+!  R2  (IOSv router)  - Left edge, VPC5 gateway  [AS-BUILT]
+!  e0/0 = to R1 (20.x) ; e0/1 = to R3 (10.x) ; e0/2 = LAN
+! ==========================================================
+hostname R2
+!
+interface Ethernet0/0
+ ip address 20.1.1.1 255.255.255.252
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.1.1.1 255.255.255.252
+ no shutdown
+!
+interface Ethernet0/2
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+!
+! Task 1 (10.x path): use the first route only
+! Task 2 (20.x path): use the second route only
+! Both active = ECMP (load-balanced, neither task satisfied cleanly)
+ip route 192.168.20.0 255.255.255.0 e0/1 10.1.1.2
+ip route 192.168.20.0 255.255.255.0 e0/0 20.1.1.2
+!
+end

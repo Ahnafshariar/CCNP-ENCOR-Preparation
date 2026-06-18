@@ -1,0 +1,21 @@
+! ==========================================================
+!  SW4  (IOSv-L2)  - Access switch, HR (VLAN 20)  [AS-BUILT]
+!  e0/0 = uplink trunk to SW1 ; e0/1 = host (PC7 192.168.2.10)
+! ==========================================================
+hostname SW4
+!
+vlan 20
+ name HR
+vlan 100
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 100
+ switchport trunk allowed vlan 20
+ switchport mode trunk
+!
+interface Ethernet0/1
+ switchport mode access
+ switchport access vlan 20
+!
+end

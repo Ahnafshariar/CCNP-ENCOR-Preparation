@@ -28,6 +28,8 @@ Route traffic between three VLANs (10, 20, 30) on separate subnets using a singl
             VLAN 10   VLAN 20   VLAN 30
 ```
 
+![alt text](Topology.png)
+
 ## Addressing
 | Device | Interface | VLAN | IP / Mask | Role |
 |--------|-----------|:----:|-----------|------|

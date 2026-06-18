@@ -1,0 +1,18 @@
+! ==========================================================
+!  R1  (IOSv router)  - Transit router, top path  [AS-BUILT]
+!  e0/0 = to R2 (20.1.1.0/30) ; e0/1 = to R4 (20.1.1.4/30)
+! ==========================================================
+hostname R1
+!
+interface Ethernet0/0
+ ip address 20.1.1.2 255.255.255.252
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 20.1.1.5 255.255.255.252
+ no shutdown
+!
+ip route 192.168.20.0 255.255.255.0 e0/1 20.1.1.6
+ip route 192.168.10.0 255.255.255.0 e0/0 20.1.1.1
+!
+end

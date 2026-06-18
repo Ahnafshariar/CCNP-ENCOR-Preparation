@@ -1,0 +1,26 @@
+! ==========================================================
+!  R4  (IOSv router)  - Right edge, VPC6 gateway  [AS-BUILT]
+!  e0/0 = to R3 (10.x) ; e0/1 = to R1 (20.x) ; e0/2 = LAN
+!  NOTE: original config had e0/0/e0/1 swapped — fixed during debug
+! ==========================================================
+hostname R4
+!
+interface Ethernet0/0
+ ip address 10.1.1.6 255.255.255.252
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 20.1.1.6 255.255.255.252
+ no shutdown
+!
+interface Ethernet0/2
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+!
+! Task 1 (10.x path): use the first route only
+! Task 2 (20.x path): use the second route only
+! Interfaces CORRECTED: e0/0 = 10.x link, e0/1 = 20.x link
+ip route 192.168.10.0 255.255.255.0 e0/0 10.1.1.5
+ip route 192.168.10.0 255.255.255.0 e0/1 20.1.1.5
+!
+end
