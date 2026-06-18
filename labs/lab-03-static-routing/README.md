@@ -72,7 +72,7 @@ VPC5> trace 192.168.20.100
 4  192.168.20.100   (VPC6)
 ```
 
-![Task1-Traceroute VPC5 to 192.168.20.100](Trace-VPC5.png)
+![Task1-Traceroute VPC5 to 192.168.20.100](Task-1-Trace-VPC5.png)
 
 **3. Task 2 traceroute (20.1.1.x path)**
 ```
