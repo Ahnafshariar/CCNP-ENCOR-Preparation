@@ -88,7 +88,7 @@ graph TD
 
 <!-- REPO-TREE:START -->
 ```
-ccnp-encor-portfolio/
+CCNP-ENCOR-Preparation/
 ├── .github/
 │   └── workflows/
 ├── lab-environment/
@@ -105,8 +105,6 @@ ccnp-encor-portfolio/
 │   ├── 04-network-assurance/
 │   ├── 05-security/
 │   └── 06-automation/
-├── scripts/
-│   └── sync.ps1
 ├── tools/
 │   └── update_index.py
 ├── week-02/
@@ -117,8 +115,7 @@ ccnp-encor-portfolio/
 │   └── README.md
 ├── weeks/
 │   ├── week-01/
-│   ├── week-02/
-│   └── week-03/
+│   └── week-02/
 ├── .gitignore
 ├── .markdownlint.json
 ├── PROGRESS.md
