@@ -20,6 +20,6 @@ interface Ethernet0/2
 ! Task 2 (20.x path): use the second route only
 ! Both active = ECMP (load-balanced, neither task satisfied cleanly)
 ip route 192.168.20.0 255.255.255.0 e0/1 10.1.1.2
-ip route 192.168.20.0 255.255.255.0 e0/0 20.1.1.2
+ip route 192.168.20.0 255.255.255.0 e0/0 20.1.1.2 10
 !
 end
