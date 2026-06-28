@@ -1,0 +1,21 @@
+! ==========================================================
+!  R9  (IOSv-L2 switch)  - LAN access for VPC6 + VPC7  [AS-BUILT]
+!  e0/0 = to R1 ; e0/1 = VPC7 ; e0/2 = VPC6
+!  All on same 10.1.0.0/24 broadcast domain - no IP needed
+!
+!  NOTE: If R9 is a ROUTER image, IOS rejects multiple interfaces
+!  on the same /24 subnet ("% overlaps with"). Swap to an IOSv-L2
+!  switch image in EVE-NG, or use BVI bridging on a router.
+! ==========================================================
+hostname R9
+!
+interface Ethernet0/0
+ no shutdown
+!
+interface Ethernet0/1
+ no shutdown
+!
+interface Ethernet0/2
+ no shutdown
+!
+end

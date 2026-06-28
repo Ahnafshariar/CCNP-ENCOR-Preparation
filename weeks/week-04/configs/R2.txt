@@ -1,0 +1,22 @@
+! ==========================================================
+!  R2  - EIGRP transit, top path  [AS-BUILT]
+!  e0/0 = to R1 (10.1.2.0/24, BW2000)
+!  e0/1 = to R4 (10.2.4.0/24, BW2000)
+! ==========================================================
+hostname R2
+!
+interface Ethernet0/0
+ ip address 10.1.2.2 255.255.255.0
+ bandwidth 2000
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.2.4.1 255.255.255.0
+ bandwidth 2000
+ no shutdown
+!
+router eigrp 2000
+ network 10.1.2.2 0.0.0.0
+ network 10.2.4.1 0.0.0.0
+!
+end

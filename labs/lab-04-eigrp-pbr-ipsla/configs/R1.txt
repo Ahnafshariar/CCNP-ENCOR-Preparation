@@ -1,0 +1,103 @@
+! ==========================================================
+!  R1  - EIGRP + PBR + IP SLA  [AS-BUILT]
+!  e0/0 = to R9/LAN (10.1.0.0/24)
+!  e0/2 = to R2 (10.1.2.0/24, BW2000) - TOP path
+!  e0/1 = to R3 (10.1.3.0/24, BW1000) - BOTTOM path
+! ==========================================================
+hostname R1
+!
+interface Ethernet0/0
+ ip address 10.1.0.1 255.255.255.0
+ no shutdown
+ !
+ ! *** IMPORTANT: only ONE ip policy route-map can be active on
+ !     this interface at a time. Each line below REPLACES the
+ !     previous one. Uncomment ONLY the task you are testing. ***
+ !
+ ! --- Task 1: Size-based PBR (500-700 bytes via R3, rest via R2) ---
+ ! ip policy route-map PBR-Size
+ !
+ ! --- Task 2: Tracked availability (prefer R3, failover to R2) ---
+ ! ip policy route-map PBR-Tracked
+ !
+ ! --- Bonus: Telnet traffic via R3 ---
+ ! ip policy route-map PBR-Telnet
+ !
+ ! --- Bonus: VPC6 traffic via R3, fallback R2 ---
+ ! ip policy route-map PBR-VPC6
+!
+interface Ethernet0/2
+ ip address 10.1.2.1 255.255.255.0
+ bandwidth 2000
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.1.3.1 255.255.255.0
+ bandwidth 1000
+ no shutdown
+!
+! ============ EIGRP ============
+router eigrp 2000
+ network 10.1.0.1 0.0.0.0
+ network 10.1.2.1 0.0.0.0
+ network 10.1.3.1 0.0.0.0
+!
+! ============ ACLs ============
+access-list 20 permit host 10.1.0.10
+access-list 100 permit tcp any any eq 23
+ip access-list extended PBR-VPC6-TRAFFIC
+ permit ip host 10.1.0.10 any
+!
+! ============ TASK 1: Size-based PBR ============
+! Packets 500-700 bytes -> R3 (bottom path)
+! Everything else -> normal EIGRP routing
+! NOTE: match length does NOT need an ACL
+route-map PBR-Size permit 10
+ match length 500 700
+ set ip next-hop 10.1.3.2
+route-map PBR-Size permit 20
+ ! catch-all: no match/set = normal routing
+!
+! ============ TASK 2: Tracked availability PBR ============
+! VPC6 traffic -> prefer R3, failover to R2 if R3 path dies
+route-map PBR-Tracked permit 10
+ match ip address PBR-VPC6-TRAFFIC
+ set ip next-hop verify-availability 10.1.3.2 10 track 1
+ set ip next-hop verify-availability 10.1.2.2 20 track 2
+route-map PBR-Tracked permit 20
+ ! catch-all: normal routing
+!
+! ============ BONUS: Telnet via R3 ============
+route-map PBR-Telnet permit 10
+ match ip address 100
+ set ip next-hop 10.1.3.2
+route-map PBR-Telnet permit 20
+ ! catch-all: normal routing
+!
+! ============ BONUS: VPC6 all traffic via R3, fallback R2 ============
+route-map PBR-VPC6 permit 10
+ match ip address 20
+ set ip next-hop 10.1.3.2 10.1.2.2
+route-map PBR-VPC6 permit 20
+ ! catch-all: normal routing
+!
+! ============ IP SLA (heartbeat monitors) ============
+ip sla 1
+ icmp-echo 10.1.3.2 source-interface Ethernet0/1
+ frequency 10
+ timeout 5000
+ip sla schedule 1 life forever start-time now
+!
+ip sla 2
+ icmp-echo 10.1.2.2 source-interface Ethernet0/2
+ frequency 10
+ timeout 5000
+ip sla schedule 2 life forever start-time now
+!
+! ============ Track objects ============
+track 1 ip sla 1 reachability
+ delay down 1 up 5
+track 2 ip sla 2 reachability
+ delay down 1 up 5
+!
+end
