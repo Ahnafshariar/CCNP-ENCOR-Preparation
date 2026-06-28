@@ -97,7 +97,8 @@ CCNP-ENCOR-Preparation/
 ├── labs/
 │   ├── lab-01-vlan-trunk/
 │   ├── lab-02-inter-vlan-routing/
-│   └── lab-03-static-routing/
+│   ├── lab-03-static-routing/
+│   └── lab-04-eigrp-pbr-ipsla/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -110,7 +111,8 @@ CCNP-ENCOR-Preparation/
 ├── weeks/
 │   ├── week-01/
 │   ├── week-02/
-│   └── week-03/
+│   ├── week-03/
+│   └── week-04/
 ├── .gitignore
 ├── .markdownlint.json
 ├── PROGRESS.md
@@ -130,6 +132,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 01 — Basic VLAN Configuration + 802.1Q Trunk](labs/lab-01-vlan-trunk/) | 3.0 Infrastructure → Layer 2 (VLANs, trunking, 802.1Q) |
 | [Lab 02 - Inter-VLAN Routing (Router-on-a-Stick)](labs/lab-02-inter-vlan-routing/) | 3.0 Infrastructure |
 | [Lab 03 — Static Routing with Path Control](labs/lab-03-static-routing/) | 3.0 Infrastructure |
+| [Lab 04 — EIGRP + Policy-Based Routing + IP SLA Tracking](labs/lab-04-eigrp-pbr-ipsla/) | 3.0 Infrastructure |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added — see below.*
