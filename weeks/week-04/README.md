@@ -27,4 +27,4 @@
 - **`end` drops you out of config mode.** PBR commands (access-list, route-map, ip sla, track) are global config — need `conf t` before them.
 
 ## Configs
-Verified device configs: [`configs/`](configs/) — R1, R2, R3, R4, R9, VPCs.
+Verified device configs: [`configs/`](configs/) — R1, R2, R3, R4, SW1, VPCs.
