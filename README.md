@@ -54,6 +54,44 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
+**Currently shown: [Lab 04 — EIGRP + Policy-Based Routing + IP SLA Tracking](labs/lab-04-eigrp-pbr-ipsla/)**
+
+```
+                      [ R2 ]  (top path, BW2000)
+                  e0/0      e0/1
+               10.1.2.2    10.2.4.1
+                  |              |
+               10.1.2.1      10.2.4.2
+               e0/2            e0/0
+VPC6 --- R9 --- [ R1 ] -------------- [ R4 ] --- VPC8
+VPC7 ---/       e0/1            e0/1
+               10.1.3.1      10.3.4.2
+                  |              |
+               10.1.3.2    10.3.4.1
+                  e0/0      e0/1
+                      [ R3 ]  (bottom path, BW1000)
+```
+
+## Addressing
+
+| Device | Interface | IP | Subnet | Notes |
+|--------|-----------|------|--------|-------|
+| R1 | e0/0 | 10.1.0.1 | 10.1.0.0/24 | LAN gateway |
+| R1 | e0/2 | 10.1.2.1 | 10.1.2.0/24 | To R2 (BW2000) |
+| R1 | e0/1 | 10.1.3.1 | 10.1.3.0/24 | To R3 (BW1000) |
+| R2 | e0/0 | 10.1.2.2 | 10.1.2.0/24 | To R1 |
+| R2 | e0/1 | 10.2.4.1 | 10.2.4.0/24 | To R4 (BW2000) |
+| R3 | e0/0 | 10.1.3.2 | 10.1.3.0/24 | To R1 |
+| R3 | e0/1 | 10.3.4.1 | 10.3.4.0/24 | To R4 (BW1000) |
+| R4 | e0/0 | 10.2.4.2 | 10.2.4.0/24 | To R2 |
+| R4 | e0/1 | 10.3.4.2 | 10.3.4.0/24 | To R3 |
+| R4 | e0/2 | 10.4.0.1 | 10.4.0.0/24 | VPC8 gateway |
+| R9 | — | — | 10.1.0.0/24 | L2 switch (no IP) |
+| VPC6 | eth0 | 10.1.0.10 | /24 | GW 10.1.0.1 |
+| VPC7 | eth0 | 10.1.0.20 | /24 | GW 10.1.0.1 |
+| VPC8 | eth0 | 10.4.0.10 | /24 | GW 10.4.0.1 |
+
+*Each lab folder documents its own topology, so the full history stays intact as the network grows.*
 <!-- TOPOLOGY:END -->
 
 ---
