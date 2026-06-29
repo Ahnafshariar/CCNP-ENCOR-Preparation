@@ -51,34 +51,10 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 
 ## 🗺️ Current lab topology
 
-> 🔁 This topology **evolves as the labs progress** — the diagram below reflects the most recent lab. Each new lab updates this section to match the topology used for it.
+> 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
-**Currently shown: Lab 03 — Static Routing with Path Control**
-
-```mermaid
-graph TD
-    VPC5["VPC5<br/>192.168.10.100/24"]
-    R2["R2<br/>e0/2=192.168.10.1<br/>e0/0=20.1.1.1 · e0/1=10.1.1.1"]
-    R1["R1<br/>e0/0=20.1.1.2 · e0/1=20.1.1.5"]
-    R3["R3<br/>e0/0=10.1.1.2 · e0/1=10.1.1.5"]
-    R4["R4<br/>e0/0=10.1.1.6 · e0/1=20.1.1.6<br/>e0/2=192.168.20.1"]
-    VPC6["VPC6<br/>192.168.20.100/24"]
-    VPC5 --- R2
-    R2 ---|"20.1.1.0/30<br/>(top path)"| R1
-    R1 ---|"20.1.1.4/30<br/>(top path)"| R4
-    R2 ---|"10.1.1.0/30<br/>(bottom path)"| R3
-    R3 ---|"10.1.1.4/30<br/>(bottom path)"| R4
-    R4 --- VPC6
-```
-
-| Device | Role | Key configuration |
-|--------|------|-------------------|
-| **R1** | Transit (top path) | forwards between R2 and R4 via 20.1.1.x |
-| **R2** | Left edge / VPC5 GW | static routes select path to 192.168.20.0/24 |
-| **R3** | Transit (bottom path) | forwards between R2 and R4 via 10.1.1.x |
-| **R4** | Right edge / VPC6 GW | static routes select path to 192.168.10.0/24 |
-
-*Each lab folder also documents its own topology, so the full history stays intact as the network grows.*
+<!-- TOPOLOGY:START -->
+<!-- TOPOLOGY:END -->
 
 ---
 
