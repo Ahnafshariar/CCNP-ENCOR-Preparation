@@ -82,8 +82,6 @@ CCNP-ENCOR-Preparation/
 │   ├── 04-network-assurance/
 │   ├── 05-security/
 │   └── 06-automation/
-├── scripts/
-│   └── sync.ps1
 ├── tools/
 │   └── update_index.py
 ├── weeks/
