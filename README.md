@@ -72,7 +72,7 @@ VPC7 ---/       e0/1            e0/1
                       [ R3 ]  (bottom path, BW1000)
 ```
 
-![alt text](image.png)
+![alt text](image1.png)
 
 ## Addressing
 
