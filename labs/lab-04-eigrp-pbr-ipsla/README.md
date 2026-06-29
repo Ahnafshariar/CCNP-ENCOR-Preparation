@@ -65,7 +65,7 @@ VPC7 ---/       e0/1            e0/1
                       [ R3 ]  (bottom path, BW1000)
 ```
 
-![alt text](image.png)
+![alt text](image1.png)
 
 
 ## Addressing
@@ -210,7 +210,7 @@ R1# show track 2
 R1# show ip sla summary          ! all SLA probe results
 R1# show route-map PBR-Tracked   ! hit counters per entry
 ```
-![alt text](image1.png)
+![alt text](image.png)
 ---
 
 ## Why `verify-availability` matters
