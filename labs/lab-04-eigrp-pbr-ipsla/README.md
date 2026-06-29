@@ -56,7 +56,7 @@ Three layers, each useless without the next one.
                   |              |
                10.1.2.1      10.2.4.2
                e0/2            e0/0
-VPC6 --- R9 --- [ R1 ] -------------- [ R4 ] --- VPC8
+VPC6 --- SW1 --- [ R1 ] -------------- [ R4 ] --- VPC8
 VPC7 ---/       e0/1            e0/1
                10.1.3.1      10.3.4.2
                   |              |
@@ -79,7 +79,7 @@ VPC7 ---/       e0/1            e0/1
 | R4 | e0/0 | 10.2.4.2 | 10.2.4.0/24 | To R2 |
 | R4 | e0/1 | 10.3.4.2 | 10.3.4.0/24 | To R3 |
 | R4 | e0/2 | 10.4.0.1 | 10.4.0.0/24 | VPC8 gateway |
-| R9 | — | — | 10.1.0.0/24 | L2 switch (no IP) |
+| SW1 | — | — | 10.1.0.0/24 | L2 switch (no IP) |
 | VPC6 | eth0 | 10.1.0.10 | /24 | GW 10.1.0.1 |
 | VPC7 | eth0 | 10.1.0.20 | /24 | GW 10.1.0.1 |
 | VPC8 | eth0 | 10.4.0.10 | /24 | GW 10.4.0.1 |
@@ -221,9 +221,9 @@ Without `verify-availability`, PBR pushes traffic into a dead path. With it, PBR
 
 ---
 
-## R9 note
+## SW1 note
 
-R9 connects VPC6, VPC7, and R1's e0/0 — all on 10.1.0.0/24. A router cannot have multiple interfaces on the same subnet (IOS rejects with "overlaps with"). R9 must be an **IOSv-L2 switch image** in EVE-NG, acting as a pure Layer 2 device with no IP address. See [`configs/R9.txt`](configs/R9.txt).
+SW1 connects VPC6, VPC7, and R1's e0/0 — all on 10.1.0.0/24. A router cannot have multiple interfaces on the same subnet (IOS rejects with "overlaps with"). SW1 must be an **IOSv-L2 switch image** in EVE-NG, acting as a pure Layer 2 device with no IP address. See [`configs/SW1.txt`](configs/SW1.txt).
 
 ---
 
