@@ -13,7 +13,7 @@ R1# ping vrf A 20.1.0.1    → success (VRF A path only)
 R1# ping vrf B 20.1.0.1    → success (VRF B path only)
 R1# ping vrf C 20.1.0.1    → success (VRF C path only)
 ```
-
+![alt text](topology.png)
 ---
 
 ## What is VRF? (Simple version)
@@ -45,7 +45,6 @@ A router normally has **one routing table**. VRF gives it **multiple separate ro
 - **LAN side:** each VPC has a dedicated physical port (one VRF per port, no tagging needed)
 - **WAN side:** one cable between R1 and R2, carrying all three VRFs via dot1Q subinterfaces (VLAN 10 = VRF A, 20 = VRF B, 30 = VRF C)
 
-![alt text](topology.png)
 
 ## Addressing
 
