@@ -103,6 +103,31 @@ def build_topology():
 
     topo_content = topo_match.group(2).strip()
 
+    # Scan for topology images in the lab folder (png, jpg, jpeg, gif, webp)
+    img_exts = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
+    images = sorted(
+        f for f in latest.iterdir()
+        if f.is_file() and f.suffix.lower() in img_exts
+    )
+    # Also check a configs/ or images/ subfolder
+    for subdir_name in ("configs", "images", "screenshots"):
+        subdir = latest / subdir_name
+        if subdir.is_dir():
+            images.extend(sorted(
+                f for f in subdir.iterdir()
+                if f.is_file() and f.suffix.lower() in img_exts
+            ))
+
+    img_block = ""
+    if images:
+        img_lines = []
+        for img in images:
+            rel_path = img.relative_to(ROOT)
+            # Use the filename (without extension) as alt text, cleaned up
+            alt = img.stem.replace("_", " ").replace("-", " ").title()
+            img_lines.append(f"![{alt}]({rel_path})")
+        img_block = "\n\n" + "\n\n".join(img_lines)
+
     # Extract from "## Addressing" to the next "## " heading (if exists)
     addr_match = re.search(
         r"(## Addressing\s*\n)(.*?)(?=\n## |\Z)",
@@ -114,7 +139,8 @@ def build_topology():
         addr_content = "\n\n## Addressing\n\n" + addr_match.group(2).strip()
 
     return (
-        f"**Currently shown: [{title}](labs/{latest.name}/)**\n\n"
+        f"**Currently shown: [{title}](labs/{latest.name}/)**"
+        f"{img_block}\n\n"
         f"{topo_content}"
         f"{addr_content}\n\n"
         f"*Each lab folder documents its own topology, so the full history stays intact as the network grows.*"
