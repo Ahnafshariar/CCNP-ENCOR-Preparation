@@ -103,30 +103,20 @@ def build_topology():
 
     topo_content = topo_match.group(2).strip()
 
-    # Scan for topology images in the lab folder (png, jpg, jpeg, gif, webp)
+    # Look for a file named exactly "topology.*" (png/jpg/jpeg/gif/webp)
+    # All other images in the folder are ignored.
     img_exts = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
-    images = sorted(
-        f for f in latest.iterdir()
-        if f.is_file() and f.suffix.lower() in img_exts
-    )
-    # Also check a configs/ or images/ subfolder
-    for subdir_name in ("configs", "images", "screenshots"):
-        subdir = latest / subdir_name
-        if subdir.is_dir():
-            images.extend(sorted(
-                f for f in subdir.iterdir()
-                if f.is_file() and f.suffix.lower() in img_exts
-            ))
+    topo_img = None
+    for ext in sorted(img_exts):
+        candidate = latest / f"topology{ext}"
+        if candidate.is_file():
+            topo_img = candidate
+            break  # first match wins (prefer .png if multiple exist)
 
     img_block = ""
-    if images:
-        img_lines = []
-        for img in images:
-            rel_path = img.relative_to(ROOT)
-            # Use the filename (without extension) as alt text, cleaned up
-            alt = img.stem.replace("_", " ").replace("-", " ").title()
-            img_lines.append(f"![{alt}]({rel_path})")
-        img_block = "\n\n" + "\n\n".join(img_lines)
+    if topo_img:
+        rel_path = topo_img.relative_to(ROOT)
+        img_block = f"\n\n![Topology](https://github.com/Ahnafshariar/CCNP-ENCOR-Preparation/blob/main/{rel_path}?raw=true)"
 
     # Extract from "## Addressing" to the next "## " heading (if exists)
     addr_match = re.search(
