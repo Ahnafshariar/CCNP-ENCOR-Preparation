@@ -75,8 +75,6 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 - **LAN side:** each VPC has a dedicated physical port (one VRF per port, no tagging needed)
 - **WAN side:** one cable between R1 and R2, carrying all three VRFs via dot1Q subinterfaces (VLAN 10 = VRF A, 20 = VRF B, 30 = VRF C)
 
-![alt text](topology.png)
-
 ## Addressing
 
 All three VRFs use **overlapping IPs** — this is the whole point of VRF.
