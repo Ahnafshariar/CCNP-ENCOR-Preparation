@@ -54,6 +54,53 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
+**Currently shown: [Lab 05 — VRF Lite (Virtual Routing and Forwarding)](labs/lab-05-vrf-lite/)**
+
+```
+  VPC3 (VRF A)               VPC8 (VRF A)
+  10.1.0.10/24               20.1.0.10/24
+       |  e0/1                e0/1  |
+       |                            |
+  VPC4 (VRF B)    e0/0 ════ e0/0    VPC6 (VRF B)
+  10.1.0.10/24 ── [R1] ──── [R2] ── 20.1.0.10/24
+       |  e0/2   (dot1Q)    e0/2  |
+       |          trunk            |
+  VPC5 (VRF C)                VPC7 (VRF C)
+  10.1.0.10/24               20.1.0.10/24
+       |  e0/3                e0/3  |
+```
+
+![alt text](image.png)
+
+- **LAN side:** each VPC has a dedicated physical port (one VRF per port, no tagging needed)
+- **WAN side:** one cable between R1 and R2, carrying all three VRFs via dot1Q subinterfaces (VLAN 10 = VRF A, 20 = VRF B, 30 = VRF C)
+
+## Addressing
+
+All three VRFs use **overlapping IPs** — this is the whole point of VRF.
+
+| VRF | R1 LAN (e0/x) | R1 WAN (e0/0.x) | R2 WAN (e0/0.x) | R2 LAN (e0/x) |
+|:---:|----------------|-----------------|-----------------|----------------|
+| A | 10.1.0.1/24 (e0/1) | 172.16.0.2/30 (.1, v10) | 172.16.0.1/30 (.1, v10) | 20.1.0.1/24 (e0/1) |
+| B | 10.1.0.1/24 (e0/2) | 172.16.0.2/30 (.2, v20) | 172.16.0.1/30 (.2, v20) | 20.1.0.1/24 (e0/2) |
+| C | 10.1.0.1/24 (e0/3) | 172.16.0.2/30 (.3, v30) | 172.16.0.1/30 (.3, v30) | 20.1.0.1/24 (e0/3) |
+
+| VPC | VRF | IP | Gateway | Connected to |
+|-----|:---:|----|---------|-------------|
+| VPC3 | A | 10.1.0.10/24 | 10.1.0.1 | R1 e0/1 |
+| VPC4 | B | 10.1.0.10/24 | 10.1.0.1 | R1 e0/2 |
+| VPC5 | C | 10.1.0.10/24 | 10.1.0.1 | R1 e0/3 |
+| VPC8 | A | 20.1.0.10/24 | 20.1.0.1 | R2 e0/1 |
+| VPC6 | B | 20.1.0.10/24 | 20.1.0.1 | R2 e0/2 |
+| VPC7 | C | 20.1.0.10/24 | 20.1.0.1 | R2 e0/3 |
+
+Notice: VPC3, VPC4, and VPC5 all have IP **10.1.0.10** — identical. But they're on different physical ports assigned to different VRFs, so they never collide.
+
+Full device configs are in [`configs/`](configs/).
+
+---
+
+*Each lab folder documents its own topology, so the full history stays intact as the network grows.*
 <!-- TOPOLOGY:END -->
 
 ---
@@ -65,6 +112,36 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 <!-- REPO-TREE:START -->
 ```
 CCNP-ENCOR-Preparation/
+├── .github/
+│   └── workflows/
+├── lab-environment/
+│   ├── eve-ng/
+│   └── iou-web/
+├── labs/
+│   ├── lab-01-vlan-trunk/
+│   ├── lab-02-inter-vlan-routing/
+│   ├── lab-03-static-routing/
+│   ├── lab-04-eigrp-pbr-ipsla/
+│   └── lab-05-vrf-lite/
+├── notes/
+│   ├── 01-architecture/
+│   ├── 02-virtualization/
+│   ├── 03-infrastructure/
+│   ├── 04-network-assurance/
+│   ├── 05-security/
+│   └── 06-automation/
+├── tools/
+│   └── update_index.py
+├── weeks/
+│   ├── week-01/
+│   ├── week-02/
+│   ├── week-03/
+│   ├── week-04/
+│   └── week-05/
+├── .gitignore
+├── .markdownlint.json
+├── PROGRESS.md
+└── README.md
 ```
 <!-- REPO-TREE:END -->
 
@@ -77,8 +154,8 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 <!-- LAB-INDEX:START -->
 | Lab | Domain |
 |-----|--------|
-| [Lab 01 — Basic VLAN Configuration + 802.1Q Trunk](labs/lab-01-vlan-trunk/) | 3.0 Infrastructure |
-| [Lab 02 — Inter-VLAN Routing (Router-on-a-Stick)](labs/lab-02-inter-vlan-routing/) | 3.0 Infrastructure |
+| [Lab 01 — Basic VLAN Configuration + 802.1Q Trunk](labs/lab-01-vlan-trunk/) | 3.0 Infrastructure → Layer 2 (VLANs, trunking, 802.1Q) |
+| [Lab 02 - Inter-VLAN Routing (Router-on-a-Stick)](labs/lab-02-inter-vlan-routing/) | 3.0 Infrastructure |
 | [Lab 03 — Static Routing with Path Control](labs/lab-03-static-routing/) | 3.0 Infrastructure |
 | [Lab 04 — EIGRP + Policy-Based Routing + IP SLA Tracking](labs/lab-04-eigrp-pbr-ipsla/) | 3.0 Infrastructure |
 | [Lab 05 — VRF Lite (Virtual Routing and Forwarding)](labs/lab-05-vrf-lite/) | 2.0 Virtualization |
