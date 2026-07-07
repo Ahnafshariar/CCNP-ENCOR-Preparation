@@ -56,6 +56,24 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 <!-- TOPOLOGY:START -->
 **Currently shown: [Lab 05 — VRF Lite (Virtual Routing and Forwarding)](labs/lab-05-vrf-lite/)**
 
+![Image 1](labs/lab-05-vrf-lite/image-1.png)
+
+![Image 2](labs/lab-05-vrf-lite/image-2.png)
+
+![Image 3](labs/lab-05-vrf-lite/image-3.png)
+
+![Image 4](labs/lab-05-vrf-lite/image-4.png)
+
+![Image 5](labs/lab-05-vrf-lite/image-5.png)
+
+![Image 6](labs/lab-05-vrf-lite/image-6.png)
+
+![Image 7](labs/lab-05-vrf-lite/image-7.png)
+
+![Image 8](labs/lab-05-vrf-lite/image-8.png)
+
+![Topology](labs/lab-05-vrf-lite/topology.png)
+
 ```
   VPC3 (VRF A)               VPC8 (VRF A)
   10.1.0.10/24               20.1.0.10/24
@@ -70,7 +88,7 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
        |  e0/3                e0/3  |
 ```
 
-![alt text](image.png)
+![alt text](topology.png)
 
 - **LAN side:** each VPC has a dedicated physical port (one VRF per port, no tagging needed)
 - **WAN side:** one cable between R1 and R2, carrying all three VRFs via dot1Q subinterfaces (VLAN 10 = VRF A, 20 = VRF B, 30 = VRF C)
