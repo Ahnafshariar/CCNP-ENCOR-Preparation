@@ -56,23 +56,7 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 <!-- TOPOLOGY:START -->
 **Currently shown: [Lab 05 — VRF Lite (Virtual Routing and Forwarding)](labs/lab-05-vrf-lite/)**
 
-![Image 1](labs/lab-05-vrf-lite/image-1.png)
-
-![Image 2](labs/lab-05-vrf-lite/image-2.png)
-
-![Image 3](labs/lab-05-vrf-lite/image-3.png)
-
-![Image 4](labs/lab-05-vrf-lite/image-4.png)
-
-![Image 5](labs/lab-05-vrf-lite/image-5.png)
-
-![Image 6](labs/lab-05-vrf-lite/image-6.png)
-
-![Image 7](labs/lab-05-vrf-lite/image-7.png)
-
-![Image 8](labs/lab-05-vrf-lite/image-8.png)
-
-![Topology](labs/lab-05-vrf-lite/topology.png)
+![Topology](https://github.com/Ahnafshariar/CCNP-ENCOR-Preparation/blob/main/labs/lab-05-vrf-lite/topology.png?raw=true)
 
 ```
   VPC3 (VRF A)               VPC8 (VRF A)
