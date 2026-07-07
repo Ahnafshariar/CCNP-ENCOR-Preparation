@@ -24,7 +24,7 @@
 
 ## 📖 About this repository
 
-This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam — not just notes, but a working portfolio. Every lab is built and verified on **real Cisco CLI** in EVE-NG, documented with the exact verification commands and expected output, and mapped back to the official exam blueprint. The repo itself runs an **hourly auto-sync and a GitHub Actions pipeline**, so it doubles as a small demonstration of the DevOps practices I use day to day.
+This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam — not just notes, but a working portfolio. Every lab is built and verified on **real Cisco CLI** in EVE-NG, documented with the exact verification commands and expected output, and mapped back to the official exam blueprint. The repo itself runs an **auto-sync and a GitHub Actions pipeline**, so it doubles as a small demonstration of the DevOps practices I use day to day.
 
 > **What makes this different from a notes dump:** real CLI (not a simulator), verification-driven lab docs, blueprint-mapped coverage, and automation around the whole thing.
 
@@ -34,13 +34,13 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 
 > ENCOR moved to **v1.2 on 19 Mar 2026**. Wireless coverage was reduced and **Automation rose to 15%**. This portfolio tracks the v1.2 blueprint.
 
-**Overall readiness: 🟨 ~10%**
+**Overall readiness: 🟨 ~12%**
 
 | # | Domain | Weight | Progress |
 |---|--------|:------:|:--------:|
 | 1.0 | Architecture | 15% | ⬜ 0% |
-| 2.0 | Virtualization | 10% | ⬜ 0% |
-| 3.0 | **Infrastructure** | 30% | 🟨 30% |
+| 2.0 | Virtualization | 10% | 🟨 20% |
+| 3.0 | **Infrastructure** | 30% | 🟨 35% |
 | 4.0 | Network Assurance | 10% | ⬜ 0% |
 | 5.0 | Security | 20% | ⬜ 0% |
 | 6.0 | Automation & AI | 15% | ⬜ 0% |
@@ -54,46 +54,6 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 04 — EIGRP + Policy-Based Routing + IP SLA Tracking](labs/lab-04-eigrp-pbr-ipsla/)**
-
-```
-                      [ R2 ]  (top path, BW2000)
-                  e0/0      e0/1
-               10.1.2.2    10.2.4.1
-                  |              |
-               10.1.2.1      10.2.4.2
-               e0/2            e0/0
-VPC6 --- SW1 --- [ R1 ] -------------- [ R4 ] --- VPC8
-VPC7 ---/       e0/1            e0/1
-               10.1.3.1      10.3.4.2
-                  |              |
-               10.1.3.2    10.3.4.1
-                  e0/0      e0/1
-                      [ R3 ]  (bottom path, BW1000)
-```
-
-![alt text](image1.png)
-
-## Addressing
-
-| Device | Interface | IP | Subnet | Notes |
-|--------|-----------|------|--------|-------|
-| R1 | e0/0 | 10.1.0.1 | 10.1.0.0/24 | LAN gateway |
-| R1 | e0/2 | 10.1.2.1 | 10.1.2.0/24 | To R2 (BW2000) |
-| R1 | e0/1 | 10.1.3.1 | 10.1.3.0/24 | To R3 (BW1000) |
-| R2 | e0/0 | 10.1.2.2 | 10.1.2.0/24 | To R1 |
-| R2 | e0/1 | 10.2.4.1 | 10.2.4.0/24 | To R4 (BW2000) |
-| R3 | e0/0 | 10.1.3.2 | 10.1.3.0/24 | To R1 |
-| R3 | e0/1 | 10.3.4.1 | 10.3.4.0/24 | To R4 (BW1000) |
-| R4 | e0/0 | 10.2.4.2 | 10.2.4.0/24 | To R2 |
-| R4 | e0/1 | 10.3.4.2 | 10.3.4.0/24 | To R3 |
-| R4 | e0/2 | 10.4.0.1 | 10.4.0.0/24 | VPC8 gateway |
-| SW1 | — | — | 10.1.0.0/24 | L2 switch (no IP) |
-| VPC6 | eth0 | 10.1.0.10 | /24 | GW 10.1.0.1 |
-| VPC7 | eth0 | 10.1.0.20 | /24 | GW 10.1.0.1 |
-| VPC8 | eth0 | 10.4.0.10 | /24 | GW 10.4.0.1 |
-
-*Each lab folder documents its own topology, so the full history stays intact as the network grows.*
 <!-- TOPOLOGY:END -->
 
 ---
@@ -105,34 +65,6 @@ VPC7 ---/       e0/1            e0/1
 <!-- REPO-TREE:START -->
 ```
 CCNP-ENCOR-Preparation/
-├── .github/
-│   └── workflows/
-├── lab-environment/
-│   ├── eve-ng/
-│   └── iou-web/
-├── labs/
-│   ├── lab-01-vlan-trunk/
-│   ├── lab-02-inter-vlan-routing/
-│   ├── lab-03-static-routing/
-│   └── lab-04-eigrp-pbr-ipsla/
-├── notes/
-│   ├── 01-architecture/
-│   ├── 02-virtualization/
-│   ├── 03-infrastructure/
-│   ├── 04-network-assurance/
-│   ├── 05-security/
-│   └── 06-automation/
-├── tools/
-│   └── update_index.py
-├── weeks/
-│   ├── week-01/
-│   ├── week-02/
-│   ├── week-03/
-│   └── week-04/
-├── .gitignore
-├── .markdownlint.json
-├── PROGRESS.md
-└── README.md
 ```
 <!-- REPO-TREE:END -->
 
@@ -145,13 +77,14 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 <!-- LAB-INDEX:START -->
 | Lab | Domain |
 |-----|--------|
-| [Lab 01 — Basic VLAN Configuration + 802.1Q Trunk](labs/lab-01-vlan-trunk/) | 3.0 Infrastructure → Layer 2 (VLANs, trunking, 802.1Q) |
-| [Lab 02 - Inter-VLAN Routing (Router-on-a-Stick)](labs/lab-02-inter-vlan-routing/) | 3.0 Infrastructure |
+| [Lab 01 — Basic VLAN Configuration + 802.1Q Trunk](labs/lab-01-vlan-trunk/) | 3.0 Infrastructure |
+| [Lab 02 — Inter-VLAN Routing (Router-on-a-Stick)](labs/lab-02-inter-vlan-routing/) | 3.0 Infrastructure |
 | [Lab 03 — Static Routing with Path Control](labs/lab-03-static-routing/) | 3.0 Infrastructure |
 | [Lab 04 — EIGRP + Policy-Based Routing + IP SLA Tracking](labs/lab-04-eigrp-pbr-ipsla/) | 3.0 Infrastructure |
+| [Lab 05 — VRF Lite (Virtual Routing and Forwarding)](labs/lab-05-vrf-lite/) | 2.0 Virtualization |
 <!-- LAB-INDEX:END -->
 
-*↑ This table is regenerated automatically by CI whenever a lab is added — see below.*
+*↑ This table is regenerated automatically by CI whenever a lab is added.*
 
 ---
 
@@ -173,12 +106,12 @@ graph LR
     A["✏️ I edit notes / configs"] --> B["⏱️ Auto-sync<br/>(sync.ps1)"]
     B --> C["⬆️ git push"]
     C --> D["🤖 GitHub Actions CI"]
-    D --> F["🔄 Rebuild lab index + repo tree"]
+    D --> F["🔄 Rebuild lab index + repo tree + topology"]
     F --> C
 ```
 
 - **Auto-sync** — `scripts/sync.ps1` runs via Task Scheduler: rebase, commit, push. I just edit; the repo keeps itself current.
-- **CI pipeline** — `.github/workflows/ci.yml` regenerates the lab index and repo tree on every push.
+- **CI pipeline** — `.github/workflows/ci.yml` regenerates the lab index, repo tree, and topology section on every push.
 
 ---
 
@@ -188,10 +121,12 @@ graph LR
 |-------|-------|---------|
 | ✅ Done | L2 — VLANs, trunking, inter-VLAN routing | 3.0 |
 | ✅ Done | L3 — Static routing, path control | 3.0 |
+| ✅ Done | L3 — EIGRP, PBR, IP SLA tracking | 3.0 |
+| ✅ Done | Virtualization — VRF Lite | 2.0 |
 | 🟢 **Now** | L3 — OSPF, BGP, redistribution | 3.0 |
 | ⬜ Next | STP, EtherChannel, NAT, IP services | 3.0 / 4.0 |
 | ⬜ | Security — ACLs, CoPP, AAA, hardening | 5.0 |
-| ⬜ | Virtualization + Architecture | 1.0 / 2.0 |
+| ⬜ | Architecture — enterprise design, fabric | 1.0 |
 | ⬜ | Automation & AI — Python, JSON/YAML, EEM, REST | 6.0 |
 | 🎯 | Practice exams ≥ 85% · book Pearson VUE | All |
 

@@ -1,0 +1,13 @@
+! End hosts (VPCS)  [AS-BUILT]
+! All R1-side VPCs share the same IP (10.1.0.10) — isolated by VRF
+! All R2-side VPCs share the same IP (20.1.0.10) — isolated by VRF
+!
+! R1 side (gateway 10.1.0.1)
+VPC3>  ip 10.1.0.10/24 10.1.0.1       (VRF A → R1 e0/1)
+VPC4>  ip 10.1.0.10/24 10.1.0.1       (VRF B → R1 e0/2)
+VPC5>  ip 10.1.0.10/24 10.1.0.1       (VRF C → R1 e0/3)
+!
+! R2 side (gateway 20.1.0.1)
+VPC8>  ip 20.1.0.10/24 20.1.0.1       (VRF A → R2 e0/1)
+VPC6>  ip 20.1.0.10/24 20.1.0.1       (VRF B → R2 e0/2)
+VPC7>  ip 20.1.0.10/24 20.1.0.1       (VRF C → R2 e0/3)

@@ -1,0 +1,56 @@
+! ==========================================================
+!  R1  - VRF Lite (three isolated routing tables)  [AS-BUILT]
+!  e0/0    = WAN trunk to R2 (subinterfaces per VRF)
+!  e0/1    = LAN, VRF A (VPC3, 10.1.0.0/24)
+!  e0/2    = LAN, VRF B (VPC4, 10.1.0.0/24)
+!  e0/3    = LAN, VRF C (VPC5, 10.1.0.0/24)
+!  NOTE: ip vrf forwarding MUST come before ip address
+! ==========================================================
+hostname R1
+!
+ip vrf A
+ip vrf B
+ip vrf C
+!
+! --- WAN side: one cable to R2, three VRFs via dot1Q ---
+interface Ethernet0/0
+ no ip address
+ no shutdown
+!
+interface Ethernet0/0.1
+ ip vrf forwarding A
+ encapsulation dot1Q 10
+ ip address 172.16.0.2 255.255.255.252
+!
+interface Ethernet0/0.2
+ ip vrf forwarding B
+ encapsulation dot1Q 20
+ ip address 172.16.0.2 255.255.255.252
+!
+interface Ethernet0/0.3
+ ip vrf forwarding C
+ encapsulation dot1Q 30
+ ip address 172.16.0.2 255.255.255.252
+!
+! --- LAN side: one physical port per VRF (direct to VPC) ---
+interface Ethernet0/1
+ ip vrf forwarding A
+ ip address 10.1.0.1 255.255.255.0
+ no shutdown
+!
+interface Ethernet0/2
+ ip vrf forwarding B
+ ip address 10.1.0.1 255.255.255.0
+ no shutdown
+!
+interface Ethernet0/3
+ ip vrf forwarding C
+ ip address 10.1.0.1 255.255.255.0
+ no shutdown
+!
+! --- Per-VRF static routes to reach R2's LANs ---
+ip route vrf A 20.1.0.0 255.255.255.0 172.16.0.1
+ip route vrf B 20.1.0.0 255.255.255.0 172.16.0.1
+ip route vrf C 20.1.0.0 255.255.255.0 172.16.0.1
+!
+end
