@@ -1,0 +1,28 @@
+! ==========================================================
+!  R3  - ABR (area 0 + area 367)  [AS-BUILT]
+!  e0/0 = to R1 (10.1.3.0/24, area 0)
+!  e0/1 = to R6 (10.3.6.0/24, area 367)
+!  e0/2 = to R7 (10.3.7.0/24, area 367)
+!  Router ID: 3.3.3.3 (or auto-selected)
+! ==========================================================
+hostname R3
+!
+interface Ethernet0/0
+ ip address 10.1.3.2 255.255.255.0
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.3.6.1 255.255.255.0
+ ip ospf 10 area 367
+ no shutdown
+!
+interface Ethernet0/2
+ ip address 10.3.7.1 255.255.255.0
+ ip ospf 10 area 367
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 10
+ network 10.1.3.2 0.0.0.0 area 0
+!
+end

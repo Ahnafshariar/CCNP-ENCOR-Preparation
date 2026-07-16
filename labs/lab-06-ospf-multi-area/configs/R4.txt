@@ -1,0 +1,12 @@
+! ==========================================================
+!  R4  - Internal router (area 245)  [AS-BUILT]
+!  e0/0 = to R2 (10.2.4.0/24, area 245)
+! ==========================================================
+hostname R4
+!
+interface Ethernet0/0
+ ip address 10.2.4.2 255.255.255.0
+ ip ospf 10 area 245
+ no shutdown
+!
+end

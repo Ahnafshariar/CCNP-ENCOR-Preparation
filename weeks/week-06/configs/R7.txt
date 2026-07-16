@@ -1,0 +1,26 @@
+! ==========================================================
+!  R7  - Internal router (area 367) + loopback  [AS-BUILT]
+!  e0/0 = to R3 (10.3.7.0/24, area 367)
+!  Loopback100 = 10.70.70.70/32 (advertised in OSPF area 367)
+!  Router ID: 7.7.7.7
+!  OSPF priority 100 on e0/0 (forces DR election win)
+!  Network type point-to-point on e0/0
+! ==========================================================
+hostname R7
+!
+interface Loopback100
+ ip address 10.70.70.70 255.255.255.255
+ no shutdown
+!
+interface Ethernet0/0
+ ip address 10.3.7.2 255.255.255.0
+ ip ospf 10 area 367
+ ip ospf priority 100
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 10
+ router-id 7.7.7.7
+ network 10.70.70.70 0.0.0.0 area 367
+!
+end

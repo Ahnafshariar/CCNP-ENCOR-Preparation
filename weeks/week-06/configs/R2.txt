@@ -1,0 +1,28 @@
+! ==========================================================
+!  R2  - ABR (area 0 + area 245)  [AS-BUILT]
+!  e0/0 = to R1 (10.1.2.0/24, area 0)
+!  e0/1 = to R5 (10.2.5.0/24, area 245)
+!  e0/2 = to R4 (10.2.4.0/24, area 245)
+!  Router ID: 2.2.2.2
+! ==========================================================
+hostname R2
+!
+interface Ethernet0/0
+ ip address 10.1.2.2 255.255.255.0
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.2.5.1 255.255.255.0
+ ip ospf 10 area 245
+ no shutdown
+!
+interface Ethernet0/2
+ ip address 10.2.4.1 255.255.255.0
+ ip ospf 10 area 245
+ no shutdown
+!
+router ospf 10
+ router-id 2.2.2.2
+ network 10.1.2.2 0.0.0.0 area 0
+!
+end
