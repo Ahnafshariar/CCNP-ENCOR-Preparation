@@ -54,51 +54,47 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 05 — VRF Lite (Virtual Routing and Forwarding)](labs/lab-05-vrf-lite/)**
-
-![Topology](https://github.com/Ahnafshariar/CCNP-ENCOR-Preparation/blob/main/labs/lab-05-vrf-lite/topology.png?raw=true)
+**Currently shown: [Lab 06 — Multi-Area OSPF](labs/lab-06-ospf-multi-area/)**
 
 ```
-  VPC3 (VRF A)               VPC8 (VRF A)
-  10.1.0.10/24               20.1.0.10/24
-       |  e0/1                e0/1  |
-       |                            |
-  VPC4 (VRF B)    e0/0 ════ e0/0    VPC6 (VRF B)
-  10.1.0.10/24 ── [R1] ──── [R2] ── 20.1.0.10/24
-       |  e0/2   (dot1Q)    e0/2  |
-       |          trunk            |
-  VPC5 (VRF C)                VPC7 (VRF C)
-  10.1.0.10/24               20.1.0.10/24
-       |  e0/3                e0/3  |
-```
+                        [ R4 ]
+                        e0/0
+                      10.2.4.2
+                          |
+                      10.2.4.1
+                        e0/2
+[ R6 ]──e0/0──e0/1──[ R3 ]──e0/0──e0/1──[ R1 ]──e0/0──[ R2 ]──e0/1──e0/0──[ R5 ]
+10.3.6.2    10.3.6.1  10.1.3.2  10.1.3.1  10.1.2.1  10.1.2.2  10.2.5.1  10.2.5.2
+                        e0/2
+                      10.3.7.1
+                          |
+                      10.3.7.2
+                        e0/0
+                        [ R7 ]
+                     Lo100: 10.70.70.70
 
-- **LAN side:** each VPC has a dedicated physical port (one VRF per port, no tagging needed)
-- **WAN side:** one cable between R1 and R2, carrying all three VRFs via dot1Q subinterfaces (VLAN 10 = VRF A, 20 = VRF B, 30 = VRF C)
+|── Area 367 ──|──── Area 0 ────|──── Area 245 ───|
+  R6, R7, R3*      R1, R2*, R3*     R4, R5, R2*
+              (* = ABR)
+```
 
 ## Addressing
 
-All three VRFs use **overlapping IPs** — this is the whole point of VRF.
-
-| VRF | R1 LAN (e0/x) | R1 WAN (e0/0.x) | R2 WAN (e0/0.x) | R2 LAN (e0/x) |
-|:---:|----------------|-----------------|-----------------|----------------|
-| A | 10.1.0.1/24 (e0/1) | 172.16.0.2/30 (.1, v10) | 172.16.0.1/30 (.1, v10) | 20.1.0.1/24 (e0/1) |
-| B | 10.1.0.1/24 (e0/2) | 172.16.0.2/30 (.2, v20) | 172.16.0.1/30 (.2, v20) | 20.1.0.1/24 (e0/2) |
-| C | 10.1.0.1/24 (e0/3) | 172.16.0.2/30 (.3, v30) | 172.16.0.1/30 (.3, v30) | 20.1.0.1/24 (e0/3) |
-
-| VPC | VRF | IP | Gateway | Connected to |
-|-----|:---:|----|---------|-------------|
-| VPC3 | A | 10.1.0.10/24 | 10.1.0.1 | R1 e0/1 |
-| VPC4 | B | 10.1.0.10/24 | 10.1.0.1 | R1 e0/2 |
-| VPC5 | C | 10.1.0.10/24 | 10.1.0.1 | R1 e0/3 |
-| VPC8 | A | 20.1.0.10/24 | 20.1.0.1 | R2 e0/1 |
-| VPC6 | B | 20.1.0.10/24 | 20.1.0.1 | R2 e0/2 |
-| VPC7 | C | 20.1.0.10/24 | 20.1.0.1 | R2 e0/3 |
-
-Notice: VPC3, VPC4, and VPC5 all have IP **10.1.0.10** — identical. But they're on different physical ports assigned to different VRFs, so they never collide.
-
-Full device configs are in [`configs/`](configs/).
-
----
+| Device | Interface | IP | Area | Role |
+|--------|-----------|------|:----:|------|
+| R1 | e0/0 | 10.1.2.1/24 | 0 | Backbone |
+| R1 | e0/1 | 10.1.3.1/24 | 0 | Backbone |
+| R2 | e0/0 | 10.1.2.2/24 | 0 | ABR (area 0 side) |
+| R2 | e0/1 | 10.2.5.1/24 | 245 | ABR (area 245 side) |
+| R2 | e0/2 | 10.2.4.1/24 | 245 | ABR (area 245 side) |
+| R3 | e0/0 | 10.1.3.2/24 | 0 | ABR (area 0 side) |
+| R3 | e0/1 | 10.3.6.1/24 | 367 | ABR (area 367 side) |
+| R3 | e0/2 | 10.3.7.1/24 | 367 | ABR (area 367 side) |
+| R4 | e0/0 | 10.2.4.2/24 | 245 | Internal |
+| R5 | e0/0 | 10.2.5.2/24 | 245 | Internal |
+| R6 | e0/0 | 10.3.6.2/24 | 367 | Internal |
+| R7 | e0/0 | 10.3.7.2/24 | 367 | Internal |
+| R7 | Lo100 | 10.70.70.70/32 | 367 | Loopback (stable ID) |
 
 *Each lab folder documents its own topology, so the full history stays intact as the network grows.*
 <!-- TOPOLOGY:END -->
@@ -122,7 +118,8 @@ CCNP-ENCOR-Preparation/
 │   ├── lab-02-inter-vlan-routing/
 │   ├── lab-03-static-routing/
 │   ├── lab-04-eigrp-pbr-ipsla/
-│   └── lab-05-vrf-lite/
+│   ├── lab-05-vrf-lite/
+│   └── lab-06-ospf-multi-area/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -137,7 +134,8 @@ CCNP-ENCOR-Preparation/
 │   ├── week-02/
 │   ├── week-03/
 │   ├── week-04/
-│   └── week-05/
+│   ├── week-05/
+│   └── week-06/
 ├── .gitignore
 ├── .markdownlint.json
 ├── PROGRESS.md
@@ -159,6 +157,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 03 — Static Routing with Path Control](labs/lab-03-static-routing/) | 3.0 Infrastructure |
 | [Lab 04 — EIGRP + Policy-Based Routing + IP SLA Tracking](labs/lab-04-eigrp-pbr-ipsla/) | 3.0 Infrastructure |
 | [Lab 05 — VRF Lite (Virtual Routing and Forwarding)](labs/lab-05-vrf-lite/) | 2.0 Virtualization |
+| [Lab 06 — Multi-Area OSPF](labs/lab-06-ospf-multi-area/) | 3.0 Infrastructure |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added.*
