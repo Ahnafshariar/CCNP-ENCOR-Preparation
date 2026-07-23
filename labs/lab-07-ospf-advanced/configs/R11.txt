@@ -1,0 +1,21 @@
+! ==========================================================
+!  R11  - Area 411 (totally stub, OSPF 100)  [AS-BUILT]
+!  e0/0 = to R4, 10.4.11.0/24, area 411
+!  Router ID: 11.11.11.11
+! ==========================================================
+hostname R11
+!
+interface Loopback1
+ ip address 11.11.11.11 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.4.11.11 255.255.255.0
+ ip ospf 100 area 411
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 100
+ router-id 11.11.11.11
+ area 411 stub
+!
+end

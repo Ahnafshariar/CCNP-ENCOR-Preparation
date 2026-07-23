@@ -1,0 +1,42 @@
+! ==========================================================
+!  R4  - ABR (area 0 + area 48 + area 411 totally stub)  [AS-BUILT]
+!  e0/0 = backbone 10.0.0.0/24, area 0 (via switch)
+!  e0/1 = to R8, 10.4.8.0/24, area 48
+!  e0/2 = to R11, 10.4.11.0/24, area 411 (OSPF 100, totally stub)
+!  Virtual-link to R8 (8.8.8.8) through area 48
+!  Redistributes OSPF 10 <-> OSPF 100
+!  Router ID: 4.4.4.4  |  OSPF priority 50
+! ==========================================================
+hostname R4
+!
+interface Loopback1
+ ip address 4.4.4.4 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.0.0.4 255.255.255.0
+ ip ospf 10 area 0
+ ip ospf priority 50
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.4.8.4 255.255.255.0
+ ip ospf 10 area 48
+ ip ospf network point-to-point
+ no shutdown
+!
+interface Ethernet0/2
+ ip address 10.4.11.4 255.255.255.0
+ ip ospf 100 area 411
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 10
+ router-id 4.4.4.4
+ area 48 virtual-link 8.8.8.8
+ redistribute ospf 100 subnets
+!
+router ospf 100
+ redistribute ospf 10 subnets
+ area 411 stub no-summary
+!
+end

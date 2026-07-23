@@ -1,0 +1,32 @@
+! ==========================================================
+!  R1  - ASBR (OSPF 10 + OSPF 100)  [AS-BUILT]
+!  e0/0 = backbone 10.0.0.0/24, area 0 (via switch)
+!  e0/1 = to R7, 10.1.7.0/24 (OSPF 100, area 0)
+!  Redistributes OSPF 10 <-> OSPF 100
+!  Router ID: 1.1.1.1  |  OSPF priority 0 (never DR)
+! ==========================================================
+hostname R1
+!
+interface Loopback1
+ ip address 1.1.1.1 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.0.0.1 255.255.255.0
+ ip ospf 10 area 0
+ ip ospf priority 0
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.1.7.1 255.255.255.0
+ ip ospf 100 area 0
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 10
+ router-id 1.1.1.1
+ redistribute ospf 100 metric 10000 metric-type 2 subnets
+!
+router ospf 100
+ redistribute ospf 10 subnets
+!
+end

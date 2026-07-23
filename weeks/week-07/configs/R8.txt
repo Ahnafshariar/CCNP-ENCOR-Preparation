@@ -1,0 +1,44 @@
+! ==========================================================
+!  R8  - ABR (area 48 + area 108 via virtual-links)  [AS-BUILT]
+!  e0/0 = to R4, 10.4.8.0/24, area 48
+!  e0/1 = to R10, 10.8.10.0/24, area 108
+!  Lo100-102 = 192.168.200-202.x (advertised in area 48)
+!  Virtual-link to R4 (4.4.4.4) through area 48
+!  Virtual-link to R10 (10.10.10.10) through area 108
+!  Router ID: 8.8.8.8
+! ==========================================================
+hostname R8
+!
+interface Loopback1
+ ip address 8.8.8.8 255.255.255.255
+!
+interface Loopback100
+ ip address 192.168.200.8 255.255.255.255
+ ip ospf 10 area 48
+!
+interface Loopback101
+ ip address 192.168.201.8 255.255.255.255
+ ip ospf 10 area 48
+!
+interface Loopback102
+ ip address 192.168.202.8 255.255.255.255
+ ip ospf 10 area 48
+!
+interface Ethernet0/0
+ ip address 10.4.8.8 255.255.255.0
+ ip ospf 10 area 48
+ ip ospf network point-to-point
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.8.10.8 255.255.255.0
+ ip ospf 10 area 108
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 10
+ router-id 8.8.8.8
+ area 48 virtual-link 4.4.4.4
+ area 108 virtual-link 10.10.10.10
+!
+end

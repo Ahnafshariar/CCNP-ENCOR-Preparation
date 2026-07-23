@@ -1,0 +1,20 @@
+! ==========================================================
+!  R9  - Separate OSPF domain (OSPF 900)  [AS-BUILT]
+!  e0/0 = to R5, 10.5.9.0/24 (OSPF 900, area 0)
+!  Router ID: 9.9.9.9
+! ==========================================================
+hostname R9
+!
+interface Loopback1
+ ip address 9.9.9.9 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.5.9.9 255.255.255.0
+ ip ospf 900 area 0
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 900
+ router-id 9.9.9.9
+!
+end

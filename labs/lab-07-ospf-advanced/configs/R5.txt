@@ -1,0 +1,46 @@
+! ==========================================================
+!  R5  - ASBR in NSSA (OSPF 10 area 35 + OSPF 900)  [AS-BUILT]
+!  e0/0 = to R3, 10.3.5.0/24, area 35 (NSSA)
+!  e0/1 = to R9, 10.5.9.0/24 (OSPF 900, area 0)
+!  Lo100-102 = 172.16.x.x (advertised in area 35)
+!  Redistributes OSPF 10 <-> OSPF 900
+!  Router ID: 5.5.5.5
+! ==========================================================
+hostname R5
+!
+interface Loopback1
+ ip address 5.5.5.5 255.255.255.255
+!
+interface Loopback100
+ ip address 172.16.100.5 255.255.255.255
+ ip ospf 10 area 35
+!
+interface Loopback101
+ ip address 172.16.101.5 255.255.255.255
+ ip ospf 10 area 35
+!
+interface Loopback102
+ ip address 172.16.102.5 255.255.255.255
+ ip ospf 10 area 35
+!
+interface Ethernet0/0
+ ip address 10.3.5.5 255.255.255.0
+ ip ospf 10 area 35
+ ip ospf network point-to-point
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.5.9.5 255.255.255.0
+ ip ospf 900 area 0
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 10
+ router-id 5.5.5.5
+ redistribute ospf 900 subnets
+ area 35 nssa
+!
+router ospf 900
+ redistribute ospf 10 subnets
+!
+end

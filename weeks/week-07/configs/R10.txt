@@ -1,0 +1,34 @@
+! ==========================================================
+!  R10  - Area 108 (needs virtual-link to reach area 0)  [AS-BUILT]
+!  e0/0 = to R8, 10.8.10.0/24, area 108
+!  Lo100-102 = 192.168.210-212.x (advertised in area 48)
+!  Virtual-link to R8 (8.8.8.8) through area 108
+!  Router ID: 10.10.10.10
+! ==========================================================
+hostname R10
+!
+interface Loopback1
+ ip address 10.10.10.10 255.255.255.255
+!
+interface Loopback100
+ ip address 192.168.210.10 255.255.255.255
+ ip ospf 10 area 48
+!
+interface Loopback101
+ ip address 192.168.211.10 255.255.255.255
+ ip ospf 10 area 48
+!
+interface Loopback102
+ ip address 192.168.212.10 255.255.255.255
+ ip ospf 10 area 48
+!
+interface Ethernet0/0
+ ip address 10.8.10.10 255.255.255.0
+ ip ospf 10 area 108
+ ip ospf network point-to-point
+ no shutdown
+!
+router ospf 10
+ router-id 10.10.10.10
+!
+end
