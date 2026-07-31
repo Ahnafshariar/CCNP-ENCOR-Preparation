@@ -54,77 +54,47 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 07 — Advanced OSPF: Multi-Area, Stub, NSSA, Virtual-Links, Redistribution](labs/lab-07-ospf-advanced/)**
+**Currently shown: [Lab 08 — IS-IS (Intermediate System to Intermediate System)](labs/lab-08-isis/)**
 
 ```
-                            [ R7 ]  OSPF 100
-                          10.1.7.7
-                              |  (P2P)
-                          10.1.7.1
-           R1 ASBR              e0/1
-  (OSPF 10 <-> 100)            [ R1 ]  pri=0
-                            10.0.0.1
-                                |
-  [ R6 ]                   [== SW1 ==]                      [ R9 ]  OSPF 900
-192.168.x.x               /    |     \                    10.5.9.9
-  10.2.6.6            10.0.0.2 10.0.0.3 10.0.0.4             |  (P2P)
-     |  (P2P)           /      |        \                 10.5.9.5
-  10.2.6.2         [ R2 ]   [ R3 ]    [ R4 ]              e0/1
-   e0/1           pri=100  pri=80    pri=50              [ R5 ]  ASBR
-  [ R2 ] ABR       (DR)    (BDR)       |  e0/1          10.3.5.5
-  area 26          e0/1     e0/1    10.4.8.4                |  (P2P)
-  STUB           10.2.6.2 10.3.5.3     |  (P2P)        10.3.5.3
-                 area 26  area 35   10.4.8.8              e0/1
-                 STUB     NSSA       [ R8 ] ---- 10.8.10.8    [ R3 ] ABR
-                                   area 48  (P2P)  area 108   area 35
-                           R4 e0/2      |         10.8.10.10  NSSA
-                         10.4.11.4   VL: R4<->R8  [ R10 ]
-                              |      VL: R8<->R10  VL to area 0
-                          10.4.11.11
-                           [ R11 ]
-                          area 411
-                       TOTALLY STUB
-                        (OSPF 100)
+Area 0200 (Level-1)                L2 Backbone              Area 0100 (Level-1)
+                                   (Area 0010)
+
+[R2] ── e0/0 ── e0/1 ─┐                               ┌─ e0/1 ── e0/0 ── [R6]
+                       │                               │
+ e0/1                  [R1]── e0/0 ──e0/1 ──[R7]── e0/0 ──[R4]
+                       │    L2-only        L2-only      │
+[R3] ── e0/1 ── e0/2 ─┘                               └─ e0/2 ── e0/1 ── [R5]
+ e0/0 ── e0/1 ── R2                                       e0/0 ── e0/1 ── R6
+
+
+R1: L1-L2 (bridges area 0200 to backbone)
+R7: L2-only (pure backbone transit)
+R4: L1-L2 (bridges area 0100 to backbone)
+R2, R3: L1-only (area 0200 internal)
+R5, R6: L1-only (area 0100 internal)
 ```
 
 ## Addressing
 
-| Device | Interface | IP | Area | OSPF Process | Role |
-|--------|-----------|------|------|:------------:|------|
-| R1 | e0/0 | 10.0.0.1/24 | 0 | 10 | Backbone (pri 0, never DR) |
-| R1 | e0/1 | 10.1.7.1/24 | 0 | 100 | ASBR link to R7 |
-| R1 | Lo1 | 1.1.1.1/32 | — | — | Router ID |
-| R2 | e0/0 | 10.0.0.2/24 | 0 | 10 | Backbone (pri 100, DR) |
-| R2 | e0/1 | 10.2.6.2/24 | 26 | 10 | ABR → stub area |
-| R2 | Lo1 | 2.2.2.2/32 | — | — | Router ID |
-| R3 | e0/0 | 10.0.0.3/24 | 0 | 10 | Backbone (pri 80, BDR) |
-| R3 | e0/1 | 10.3.5.3/24 | 35 | 10 | ABR → NSSA |
-| R3 | Lo1 | 3.3.3.3/32 | — | — | Router ID |
-| R4 | e0/0 | 10.0.0.4/24 | 0 | 10 | Backbone (pri 50) |
-| R4 | e0/1 | 10.4.8.4/24 | 48 | 10 | ABR, virtual-link to R8 |
-| R4 | e0/2 | 10.4.11.4/24 | 411 | 100 | ASBR → totally stub |
-| R4 | Lo1 | 4.4.4.4/32 | — | — | Router ID |
-| R5 | e0/0 | 10.3.5.5/24 | 35 | 10 | NSSA internal + ASBR |
-| R5 | e0/1 | 10.5.9.5/24 | 0 | 900 | Link to R9 (separate OSPF) |
-| R5 | Lo100-102 | 172.16.x.5/32 | 35 | 10 | Advertised in NSSA |
-| R5 | Lo1 | 5.5.5.5/32 | — | — | Router ID |
-| R6 | e0/0 | 10.2.6.6/24 | 26 | 10 | Stub internal |
-| R6 | Lo100-102 | 192.168.x.6/32 | 26 | 10 | Advertised in stub |
-| R6 | Lo1 | 6.6.6.6/32 | — | — | Router ID |
-| R7 | e0/0 | 10.1.7.7/24 | 0 | 100 | Separate OSPF domain |
-| R7 | Lo100-102 | 10.10.x.7/32 | 17 | 100 | OSPF 100 area 17 |
-| R7 | Lo1 | 7.7.7.7/32 | — | — | Router ID |
-| R8 | e0/0 | 10.4.8.8/24 | 48 | 10 | VL to R4 + R10 |
-| R8 | e0/1 | 10.8.10.8/24 | 108 | 10 | VL transit to R10 |
-| R8 | Lo100-102 | 192.168.20x.8/32 | 48 | 10 | Advertised in area 48 |
-| R8 | Lo1 | 8.8.8.8/32 | — | — | Router ID |
-| R9 | e0/0 | 10.5.9.9/24 | 0 | 900 | Separate OSPF domain |
-| R9 | Lo1 | 9.9.9.9/32 | — | — | Router ID |
-| R10 | e0/0 | 10.8.10.10/24 | 108 | 10 | VL to area 0 via R8 |
-| R10 | Lo100-102 | 192.168.21x.10/32 | 48 | 10 | Advertised in area 48 |
-| R10 | Lo1 | 10.10.10.10/32 | — | — | Router ID |
-| R11 | e0/0 | 10.4.11.11/24 | 411 | 100 | Totally stub internal |
-| R11 | Lo1 | 11.11.11.11/32 | — | — | Router ID |
+| Device | Interface | IP | IS-IS Level | Area |
+|--------|-----------|------|:-----------:|:----:|
+| R1 | e0/0 | 10.1.7.1/24 | L2 | 0200 |
+| R1 | e0/1 | 10.1.2.1/24 | L1 | 0200 |
+| R1 | e0/2 | 10.1.3.1/24 | L1 | 0200 |
+| R2 | e0/0 | 10.1.2.2/24 | L1 | 0200 |
+| R2 | e0/1 | 10.2.3.2/24 | L1 | 0200 |
+| R3 | e0/0 | 10.2.3.3/24 | L1 | 0200 |
+| R3 | e0/1 | 10.1.3.3/24 | L1 | 0200 |
+| R7 | e0/0 | 10.4.7.7/24 | L2 | 0010 |
+| R7 | e0/1 | 10.1.7.7/24 | L2 | 0010 |
+| R4 | e0/0 | 10.4.7.4/24 | L2 | 0100 |
+| R4 | e0/1 | 10.4.6.4/24 | L1 | 0100 |
+| R4 | e0/2 | 10.4.5.4/24 | L1 | 0100 |
+| R5 | e0/0 | 10.5.6.5/24 | L1 | 0100 |
+| R5 | e0/1 | 10.4.5.5/24 | L1 | 0100 |
+| R6 | e0/0 | 10.4.6.6/24 | L1 | 0100 |
+| R6 | e0/1 | 10.5.6.6/24 | L1 | 0100 |
 
 ---
 
@@ -152,7 +122,8 @@ CCNP-ENCOR-Preparation/
 │   ├── lab-04-eigrp-pbr-ipsla/
 │   ├── lab-05-vrf-lite/
 │   ├── lab-06-ospf-multi-area/
-│   └── lab-07-ospf-advanced/
+│   ├── lab-07-ospf-advanced/
+│   └── lab-08-isis/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -169,7 +140,8 @@ CCNP-ENCOR-Preparation/
 │   ├── week-04/
 │   ├── week-05/
 │   ├── week-06/
-│   └── week-07/
+│   ├── week-07/
+│   └── week-08/
 ├── .gitignore
 ├── .markdownlint.json
 ├── PROGRESS.md
@@ -193,6 +165,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 05 — VRF Lite (Virtual Routing and Forwarding)](labs/lab-05-vrf-lite/) | 2.0 Virtualization |
 | [Lab 06 — Multi-Area OSPF](labs/lab-06-ospf-multi-area/) | 3.0 Infrastructure |
 | [Lab 07 — Advanced OSPF: Multi-Area, Stub, NSSA, Virtual-Links, Redistribution](labs/lab-07-ospf-advanced/) | 3.0 Infrastructure |
+| [Lab 08 — IS-IS (Intermediate System to Intermediate System)](labs/lab-08-isis/) | ⚠️ **Out of syllabus** |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added.*
