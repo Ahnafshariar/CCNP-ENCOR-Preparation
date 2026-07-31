@@ -1,0 +1,40 @@
+! ==========================================================
+!  R2 - IS-IS Level-1 only (area 0200 internal) [AS-BUILT]
+!  e0/0 = to R1, 10.1.2.0/24
+!  e0/1 = to R3, 10.2.3.0/24
+!  Lo100-102 = 10.2.2.x (advertised in IS-IS)
+!  NET: 49.0200.0000.0000.2222.00
+! ==========================================================
+hostname R2
+!
+interface Loopback0
+ ip address 2.2.2.2 255.255.255.255
+ no shutdown
+!
+interface Loopback100
+ ip address 10.2.2.100 255.255.255.255
+ ip router isis 10
+!
+interface Loopback101
+ ip address 10.2.2.101 255.255.255.255
+ ip router isis 10
+!
+interface Loopback102
+ ip address 10.2.2.102 255.255.255.255
+ ip router isis 10
+!
+interface Ethernet0/0
+ ip address 10.1.2.2 255.255.255.0
+ ip router isis 10
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.2.3.2 255.255.255.0
+ ip router isis 10
+ no shutdown
+!
+router isis 10
+ net 49.0200.0000.0000.2222.00
+ is-type level-1
+!
+end

@@ -1,0 +1,41 @@
+! ==========================================================
+!  R6 - IS-IS Level-1 only (area 0100 internal) [AS-BUILT]
+!  e0/0 = to R4, 10.4.6.0/24
+!  e0/1 = to R5, 10.5.6.0/24
+!  Lo100-102 = 10.6.6.x (advertised in IS-IS)
+!  NET: 49.0100.0000.0000.6666.00
+!  BUG FIXED: Lo102 mask was 255.255.255.25A5 (typo), corrected to /32
+! ==========================================================
+hostname R6
+!
+interface Loopback0
+ ip address 6.6.6.6 255.255.255.255
+ no shutdown
+!
+interface Loopback100
+ ip address 10.6.6.100 255.255.255.255
+ ip router isis 10
+!
+interface Loopback101
+ ip address 10.6.6.101 255.255.255.255
+ ip router isis 10
+!
+interface Loopback102
+ ip address 10.6.6.102 255.255.255.255
+ ip router isis 10
+!
+interface Ethernet0/0
+ ip address 10.4.6.6 255.255.255.0
+ ip router isis 10
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.5.6.6 255.255.255.0
+ ip router isis 10
+ no shutdown
+!
+router isis 10
+ net 49.0100.0000.0000.6666.00
+ is-type level-1
+!
+end

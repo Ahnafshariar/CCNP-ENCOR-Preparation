@@ -1,0 +1,27 @@
+! ==========================================================
+!  R7 - IS-IS Level-2 only (backbone transit) [AS-BUILT]
+!  e0/0 = to R4, 10.4.7.0/24 (L2)
+!  e0/1 = to R1, 10.1.7.0/24 (L2)
+!  NET: 49.0010.0000.0000.7777.00 (area 0010, L2 backbone)
+! ==========================================================
+hostname R7
+!
+interface Loopback0
+ ip address 7.7.7.7 255.255.255.255
+ no shutdown
+!
+interface Ethernet0/0
+ ip address 10.4.7.7 255.255.255.0
+ ip router isis 10
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.1.7.7 255.255.255.0
+ ip router isis 10
+ no shutdown
+!
+router isis 10
+ net 49.0010.0000.0000.7777.00
+ is-type level-2-only
+!
+end

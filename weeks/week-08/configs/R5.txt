@@ -1,0 +1,27 @@
+! ==========================================================
+!  R5 - IS-IS Level-1 only (area 0100 internal) [AS-BUILT]
+!  e0/0 = to R6, 10.5.6.0/24
+!  e0/1 = to R4, 10.4.5.0/24
+!  NET: 49.0100.0000.0000.5555.00
+! ==========================================================
+hostname R5
+!
+interface Loopback0
+ ip address 5.5.5.5 255.255.255.255
+ no shutdown
+!
+interface Ethernet0/0
+ ip address 10.5.6.5 255.255.255.0
+ ip router isis 10
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.4.5.5 255.255.255.0
+ ip router isis 10
+ no shutdown
+!
+router isis 10
+ net 49.0100.0000.0000.5555.00
+ is-type level-1
+!
+end

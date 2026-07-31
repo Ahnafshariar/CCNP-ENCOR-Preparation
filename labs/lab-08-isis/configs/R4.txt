@@ -1,0 +1,37 @@
+! ==========================================================
+!  R4 - IS-IS L1-L2 (bridges area 0100 to L2 backbone) [AS-BUILT]
+!  e0/0 = to R7, 10.4.7.0/24 (L2 only)
+!  e0/1 = to R6, 10.4.6.0/24 (L1 only)
+!  e0/2 = to R5, 10.4.5.0/24 (L1 only)
+!  NET: 49.0100.0000.0000.4444.00 (area 0100)
+!  BUG FIXED: original had e0/0 and e0/1 both as 10.4.6.4 (duplicate)
+!  e0/0 corrected to 10.4.7.4 (to R7 backbone link)
+! ==========================================================
+hostname R4
+!
+interface Loopback0
+ ip address 4.4.4.4 255.255.255.255
+ no shutdown
+!
+interface Ethernet0/0
+ ip address 10.4.7.4 255.255.255.0
+ ip router isis 10
+ isis circuit-type level-2-only
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.4.6.4 255.255.255.0
+ ip router isis 10
+ isis circuit-type level-1
+ no shutdown
+!
+interface Ethernet0/2
+ ip address 10.4.5.4 255.255.255.0
+ ip router isis 10
+ isis circuit-type level-1
+ no shutdown
+!
+router isis 10
+ net 49.0100.0000.0000.4444.00
+!
+end

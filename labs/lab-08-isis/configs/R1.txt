@@ -1,0 +1,35 @@
+! ==========================================================
+!  R1 - IS-IS L1-L2 (bridges area 0200 to L2 backbone) [AS-BUILT]
+!  e0/0 = to R7, 10.1.7.0/24 (L2 only)
+!  e0/1 = to R2, 10.1.2.0/24 (L1 only)
+!  e0/2 = to R3, 10.1.3.0/24 (L1 only)
+!  NET: 49.0200.0000.0000.1111.00 (area 0200)
+! ==========================================================
+hostname R1
+!
+interface Loopback0
+ ip address 1.1.1.1 255.255.255.255
+ no shutdown
+!
+interface Ethernet0/0
+ ip address 10.1.7.1 255.255.255.0
+ ip router isis 10
+ isis circuit-type level-2-only
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.1.2.1 255.255.255.0
+ ip router isis 10
+ isis circuit-type level-1
+ no shutdown
+!
+interface Ethernet0/2
+ ip address 10.1.3.1 255.255.255.0
+ ip router isis 10
+ isis circuit-type level-1
+ no shutdown
+!
+router isis 10
+ net 49.0200.0000.0000.1111.00
+!
+end
