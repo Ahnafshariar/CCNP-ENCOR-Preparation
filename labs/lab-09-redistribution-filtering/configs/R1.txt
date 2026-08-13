@@ -1,0 +1,88 @@
+! ==========================================================
+!  R1 - ASBR (EIGRP 100 + OSPF 100) - Redistribution Hub [AS-BUILT]
+!  e0/0 = to R2, 10.1.2.0/24 (EIGRP 100)
+!  e0/1 = to R3, 10.1.3.0/24 (OSPF 100, area 0)
+!
+!  This router demonstrates FOUR redistribution filtering tools.
+!  Only ONE redistribute per source is active at a time.
+!  Each tool is an ALTERNATIVE - uncomment the one being tested.
+! ==========================================================
+hostname R1
+!
+interface Ethernet0/0
+ ip address 10.1.2.1 255.255.255.0
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.1.3.1 255.255.255.0
+ ip ospf 100 area 0
+ no shutdown
+!
+! ============ EIGRP ============
+router eigrp 100
+ network 10.1.2.1 0.0.0.0
+!
+! ============ ACLs (for distribute-list and route-map filtering) ============
+! Permits only odd-numbered loopbacks from R2
+access-list 10 permit 20.20.1.2 0.0.0.0
+access-list 10 permit 20.20.3.2 0.0.0.0
+access-list 10 permit 20.20.5.2 0.0.0.0
+access-list 10 permit 20.20.7.2 0.0.0.0
+! implicit deny any blocks 20.20.2.2, 20.20.4.2, 20.20.6.2, 20.20.9.2
+!
+! ============ Prefix-list (for OSPF->EIGRP filtering) ============
+! Permits any 10.x.x.x route with a mask between /8 and /24
+ip prefix-list OSPF-TO-EIGRP seq 100 permit 10.0.0.0/8 le 24
+!
+! ============ ROUTE-MAPS ============
+!
+! --- Tool 3: ACL-based route-map (EIGRP into OSPF) ---
+route-map EIGRP_TO_OSPF permit 10
+ match ip address 10
+route-map EIGRP_TO_OSPF permit 20
+ ! catch-all: everything else follows normal routing
+!
+! --- Tool 4a: Prefix-list route-map (OSPF into EIGRP) ---
+route-map OSPF-TO-EIGRP permit 100
+ match ip address prefix-list OSPF-TO-EIGRP
+route-map OSPF-TO-EIGRP permit 110
+ ! catch-all
+!
+! --- Tool 4b: Tag-based route-map (OSPF into EIGRP) ---
+! Permit routes tagged 200, deny routes tagged 100, pass the rest
+route-map XYZ permit 100
+ match tag 200
+route-map XYZ deny 101
+ match tag 100
+route-map XYZ permit 110
+ ! catch-all: untagged routes pass through
+!
+! ============ REDISTRIBUTION ============
+! NOTE: only ONE redistribute command per source is active.
+! Uncomment the tool you are testing, comment the others.
+!
+! --- EIGRP into OSPF ---
+router ospf 100
+ !
+ ! Tool 1: Basic (no filtering)
+ redistribute eigrp 100 metric 100 metric-type 2 subnets
+ !
+ ! Tool 2: Distribute-list (filter AFTER redistribution)
+ ! distribute-list 10 out
+ !
+ ! Tool 3: Route-map (filter DURING redistribution)
+ ! redistribute eigrp 100 route-map EIGRP_TO_OSPF subnets
+!
+! --- OSPF into EIGRP ---
+router eigrp 100
+ !
+ ! Tool 1: Basic (no filtering)
+ redistribute ospf 100 metric 1000 10 255 1 1500
+ !
+ ! Tool 4a: Prefix-list route-map
+ ! redistribute ospf 100 metric 1000 10 255 1 1500 route-map OSPF-TO-EIGRP
+ !
+ ! Tool 4b: Tag-based route-map
+ ! redistribute ospf 100 metric 1000 10 255 1 1500 route-map XYZ
+!
+end

@@ -1,0 +1,40 @@
+! ==========================================================
+!  R2 - EIGRP domain (8 loopbacks as route sources) [AS-BUILT]
+!  e0/0 = to R1, 10.1.2.0/24 (EIGRP 100)
+!  Lo1-Lo7,Lo9 = 20.20.x.2/32 (advertised in EIGRP)
+! ==========================================================
+hostname R2
+!
+interface Ethernet0/0
+ ip address 10.1.2.2 255.255.255.0
+ no shutdown
+!
+interface Loopback1
+ ip address 20.20.1.2 255.255.255.255
+interface Loopback2
+ ip address 20.20.2.2 255.255.255.255
+interface Loopback3
+ ip address 20.20.3.2 255.255.255.255
+interface Loopback4
+ ip address 20.20.4.2 255.255.255.255
+interface Loopback5
+ ip address 20.20.5.2 255.255.255.255
+interface Loopback6
+ ip address 20.20.6.2 255.255.255.255
+interface Loopback7
+ ip address 20.20.7.2 255.255.255.255
+interface Loopback9
+ ip address 20.20.9.2 255.255.255.255
+!
+router eigrp 100
+ network 10.1.2.2 0.0.0.0
+ network 20.20.1.2 0.0.0.0
+ network 20.20.2.2 0.0.0.0
+ network 20.20.3.2 0.0.0.0
+ network 20.20.4.2 0.0.0.0
+ network 20.20.5.2 0.0.0.0
+ network 20.20.6.2 0.0.0.0
+ network 20.20.7.2 0.0.0.0
+ network 20.20.9.2 0.0.0.0
+!
+end
