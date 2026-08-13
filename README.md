@@ -54,47 +54,28 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 08 — IS-IS (Intermediate System to Intermediate System)](labs/lab-08-isis/)**
+**Currently shown: [Lab 09 — Redistribution Filtering (Distribute-List, Route-Map, Prefix-List, Route Tags)](labs/lab-09-redistribution-filtering/)**
 
 ```
-Area 0200 (Level-1)                L2 Backbone              Area 0100 (Level-1)
-                                   (Area 0010)
-
-[R2] ── e0/0 ── e0/1 ─┐                               ┌─ e0/1 ── e0/0 ── [R6]
-                       │                               │
- e0/1                  [R1]── e0/0 ──e0/1 ──[R7]── e0/0 ──[R4]
-                       │    L2-only        L2-only      │
-[R3] ── e0/1 ── e0/2 ─┘                               └─ e0/2 ── e0/1 ── [R5]
- e0/0 ── e0/1 ── R2                                       e0/0 ── e0/1 ── R6
-
-
-R1: L1-L2 (bridges area 0200 to backbone)
-R7: L2-only (pure backbone transit)
-R4: L1-L2 (bridges area 0100 to backbone)
-R2, R3: L1-only (area 0200 internal)
-R5, R6: L1-only (area 0100 internal)
+[R2] ── e0/0 ── 10.1.2.0/24 ── e0/0 ── [R1] ── e0/1 ── 10.1.3.0/24 ── e0/0 ── [R3]
+EIGRP 100                               ASBR                              OSPF 100
+8 loopbacks                         redistributes                    7 OSPF loopbacks
+(20.20.x.2/32)                     both directions                 + prefix-list practice
+                                                                   + tag practice (192.168.x)
 ```
 
 ## Addressing
 
-| Device | Interface | IP | IS-IS Level | Area |
-|--------|-----------|------|:-----------:|:----:|
-| R1 | e0/0 | 10.1.7.1/24 | L2 | 0200 |
-| R1 | e0/1 | 10.1.2.1/24 | L1 | 0200 |
-| R1 | e0/2 | 10.1.3.1/24 | L1 | 0200 |
-| R2 | e0/0 | 10.1.2.2/24 | L1 | 0200 |
-| R2 | e0/1 | 10.2.3.2/24 | L1 | 0200 |
-| R3 | e0/0 | 10.2.3.3/24 | L1 | 0200 |
-| R3 | e0/1 | 10.1.3.3/24 | L1 | 0200 |
-| R7 | e0/0 | 10.4.7.7/24 | L2 | 0010 |
-| R7 | e0/1 | 10.1.7.7/24 | L2 | 0010 |
-| R4 | e0/0 | 10.4.7.4/24 | L2 | 0100 |
-| R4 | e0/1 | 10.4.6.4/24 | L1 | 0100 |
-| R4 | e0/2 | 10.4.5.4/24 | L1 | 0100 |
-| R5 | e0/0 | 10.5.6.5/24 | L1 | 0100 |
-| R5 | e0/1 | 10.4.5.5/24 | L1 | 0100 |
-| R6 | e0/0 | 10.4.6.6/24 | L1 | 0100 |
-| R6 | e0/1 | 10.5.6.6/24 | L1 | 0100 |
+| Device | Interface | IP | Protocol |
+|--------|-----------|------|----------|
+| R1 | e0/0 | 10.1.2.1/24 | EIGRP 100 |
+| R1 | e0/1 | 10.1.3.1/24 | OSPF 100, area 0 |
+| R2 | e0/0 | 10.1.2.2/24 | EIGRP 100 |
+| R2 | Lo1-Lo7,Lo9 | 20.20.x.2/32 | EIGRP 100 |
+| R3 | e0/0 | 10.1.3.3/24 | OSPF 100, area 0 |
+| R3 | Lo1-Lo7 | 30.30.x.3/32 | OSPF 100 |
+| R3 | Lo200-204,208 | 10.x.x.x (various) | OSPF 100 (prefix-list practice) |
+| R3 | Lo205-207 | 192.168.x.1/24 | OSPF 100 (tag practice) |
 
 ---
 
@@ -123,7 +104,8 @@ CCNP-ENCOR-Preparation/
 │   ├── lab-05-vrf-lite/
 │   ├── lab-06-ospf-multi-area/
 │   ├── lab-07-ospf-advanced/
-│   └── lab-08-isis/
+│   ├── lab-08-isis/
+│   └── lab-09-redistribution-filtering/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -141,7 +123,8 @@ CCNP-ENCOR-Preparation/
 │   ├── week-05/
 │   ├── week-06/
 │   ├── week-07/
-│   └── week-08/
+│   ├── week-08/
+│   └── week-09/
 ├── .gitignore
 ├── .markdownlint.json
 ├── PROGRESS.md
@@ -166,6 +149,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 06 — Multi-Area OSPF](labs/lab-06-ospf-multi-area/) | 3.0 Infrastructure |
 | [Lab 07 — Advanced OSPF: Multi-Area, Stub, NSSA, Virtual-Links, Redistribution](labs/lab-07-ospf-advanced/) | 3.0 Infrastructure |
 | [Lab 08 — IS-IS (Intermediate System to Intermediate System)](labs/lab-08-isis/) | ⚠️ **Out of syllabus** |
+| [Lab 09 — Redistribution Filtering (Distribute-List, Route-Map, Prefix-List, Route Tags)](labs/lab-09-redistribution-filtering/) | 3.0 Infrastructure |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added.*
