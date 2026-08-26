@@ -1,0 +1,20 @@
+! ==========================================================
+!  R8 - Transit router (OSPF only, no BGP) [AS-BUILT]
+!  e0/0 = to R6, 10.6.8.0/24 (OSPF 100, area 0)
+!  e0/1 = to R10, 10.10.8.0/24 (OSPF 100, area 0)
+!  BUG FIXED: e0/1 was /32, corrected to /24
+! ==========================================================
+hostname R8
+!
+interface Ethernet0/0
+ ip address 10.6.8.8 255.255.255.0
+ no shutdown
+!
+interface Ethernet0/1
+ ip address 10.10.8.8 255.255.255.0
+ no shutdown
+!
+router ospf 100
+ network 0.0.0.0 0.0.0.0 area 0
+!
+end

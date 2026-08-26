@@ -1,0 +1,29 @@
+! ==========================================================
+!  R6 - eBGP peer (AS 600) [AS-BUILT]
+!  e0/0 = to R8, 10.6.8.0/24 (OSPF 100, area 0)
+!  Lo0 = 6.6.6.6 (BGP update-source)
+!  Lo100 = 60.60.60.60 (advertised into BGP via network command)
+!  eBGP multihop peering to R10 (10.10.10.10) via loopbacks
+! ==========================================================
+hostname R6
+!
+interface Loopback0
+ ip address 6.6.6.6 255.255.255.255
+!
+interface Loopback100
+ ip address 60.60.60.60 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.6.8.6 255.255.255.0
+ no shutdown
+!
+router ospf 100
+ network 0.0.0.0 0.0.0.0 area 0
+!
+router bgp 600
+ neighbor 10.10.10.10 remote-as 1000
+ neighbor 10.10.10.10 ebgp-multihop 6
+ neighbor 10.10.10.10 update-source Loopback0
+ network 60.60.60.60 mask 255.255.255.255
+!
+end

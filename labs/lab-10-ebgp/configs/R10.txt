@@ -1,0 +1,37 @@
+! ==========================================================
+!  R10 - eBGP peer (AS 1000) [AS-BUILT]
+!  e0/0 = to R8, 10.10.8.0/24 (OSPF 100, area 0)
+!  Lo0 = 10.10.10.10 (BGP update-source)
+!  Lo100 = 100.100.100.100 (advertised into BGP via redistribute)
+!  eBGP multihop peering to R6 (6.6.6.6) via loopbacks
+!  BUG FIXED: prefix-list was 100.100.100.0/24, corrected to /32
+! ==========================================================
+hostname R10
+!
+interface Loopback0
+ ip address 10.10.10.10 255.255.255.255
+!
+interface Loopback100
+ ip address 100.100.100.100 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.10.8.10 255.255.255.0
+ no shutdown
+!
+router ospf 100
+ network 0.0.0.0 0.0.0.0 area 0
+!
+ip prefix-list R10_loopback seq 100 permit 100.100.100.100/32
+!
+route-map R10_R6 permit 100
+ match ip address prefix-list R10_loopback
+route-map R10_R6 permit 110
+ ! catch-all
+!
+router bgp 1000
+ neighbor 6.6.6.6 remote-as 600
+ neighbor 6.6.6.6 ebgp-multihop 6
+ neighbor 6.6.6.6 update-source Loopback0
+ redistribute connected route-map R10_R6
+!
+end
