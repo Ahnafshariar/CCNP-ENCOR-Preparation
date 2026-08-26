@@ -54,28 +54,36 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 09 — Redistribution Filtering (Distribute-List, Route-Map, Prefix-List, Route Tags)](labs/lab-09-redistribution-filtering/)**
+**Currently shown: [Lab 10 — eBGP with Loopback Peering & Multihop](labs/lab-10-ebgp/)**
 
 ```
-[R2] ── e0/0 ── 10.1.2.0/24 ── e0/0 ── [R1] ── e0/1 ── 10.1.3.0/24 ── e0/0 ── [R3]
-EIGRP 100                               ASBR                              OSPF 100
-8 loopbacks                         redistributes                    7 OSPF loopbacks
-(20.20.x.2/32)                     both directions                 + prefix-list practice
-                                                                   + tag practice (192.168.x)
+[R6]                    [R8]                    [R10]
+AS 600              (transit only)             AS 1000
+Lo0: 6.6.6.6         no BGP                  Lo0: 10.10.10.10
+Lo100: 60.60.60.60                            Lo100: 100.100.100.100
+   |                    |                        |
+   e0/0 ──── 10.6.8.0/24 ──── e0/0    e0/1 ──── 10.10.8.0/24 ──── e0/0
+                OSPF 100 area 0                    OSPF 100 area 0
+
+         ╔══════════════════════════════════════╗
+         ║  eBGP session (TCP 179)              ║
+         ║  6.6.6.6 ←──── multihop ────→ 10.10.10.10  ║
+         ║  AS 600                      AS 1000 ║
+         ╚══════════════════════════════════════╝
 ```
 
 ## Addressing
 
 | Device | Interface | IP | Protocol |
 |--------|-----------|------|----------|
-| R1 | e0/0 | 10.1.2.1/24 | EIGRP 100 |
-| R1 | e0/1 | 10.1.3.1/24 | OSPF 100, area 0 |
-| R2 | e0/0 | 10.1.2.2/24 | EIGRP 100 |
-| R2 | Lo1-Lo7,Lo9 | 20.20.x.2/32 | EIGRP 100 |
-| R3 | e0/0 | 10.1.3.3/24 | OSPF 100, area 0 |
-| R3 | Lo1-Lo7 | 30.30.x.3/32 | OSPF 100 |
-| R3 | Lo200-204,208 | 10.x.x.x (various) | OSPF 100 (prefix-list practice) |
-| R3 | Lo205-207 | 192.168.x.1/24 | OSPF 100 (tag practice) |
+| R6 | e0/0 | 10.6.8.6/24 | OSPF 100 |
+| R6 | Lo0 | 6.6.6.6/32 | BGP update-source |
+| R6 | Lo100 | 60.60.60.60/32 | Advertised into BGP |
+| R8 | e0/0 | 10.6.8.8/24 | OSPF 100 |
+| R8 | e0/1 | 10.10.8.8/24 | OSPF 100 |
+| R10 | e0/0 | 10.10.8.10/24 | OSPF 100 |
+| R10 | Lo0 | 10.10.10.10/32 | BGP update-source |
+| R10 | Lo100 | 100.100.100.100/32 | Redistributed into BGP |
 
 ---
 
@@ -105,7 +113,8 @@ CCNP-ENCOR-Preparation/
 │   ├── lab-06-ospf-multi-area/
 │   ├── lab-07-ospf-advanced/
 │   ├── lab-08-isis/
-│   └── lab-09-redistribution-filtering/
+│   ├── lab-09-redistribution-filtering/
+│   └── lab-10-ebgp/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -124,7 +133,8 @@ CCNP-ENCOR-Preparation/
 │   ├── week-06/
 │   ├── week-07/
 │   ├── week-08/
-│   └── week-09/
+│   ├── week-09/
+│   └── week-10/
 ├── .gitignore
 ├── .markdownlint.json
 ├── PROGRESS.md
@@ -150,6 +160,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 07 — Advanced OSPF: Multi-Area, Stub, NSSA, Virtual-Links, Redistribution](labs/lab-07-ospf-advanced/) | 3.0 Infrastructure |
 | [Lab 08 — IS-IS (Intermediate System to Intermediate System)](labs/lab-08-isis/) | ⚠️ **Out of syllabus** |
 | [Lab 09 — Redistribution Filtering (Distribute-List, Route-Map, Prefix-List, Route Tags)](labs/lab-09-redistribution-filtering/) | 3.0 Infrastructure |
+| [Lab 10 — eBGP with Loopback Peering & Multihop](labs/lab-10-ebgp/) | 3.0 Infrastructure |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added.*
