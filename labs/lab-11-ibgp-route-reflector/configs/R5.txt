@@ -1,31 +1,30 @@
 ! ==========================================================
-!  R5 - Route Reflector #2 (AS 100)  [AS-BUILT, final]
-!  e0/0 = to R2 (10.2.5.0/24)
-!  e0/1 = to R1 (10.1.5.0/24)
+!  R5 - Route Reflector #2 (AS 100)  [AS-BUILT, final v3]
+!  e0/0 = to R2, e0/1 = to R1, e0/3 = to R3 (all OSPF area 0)
 !  e0/2 = to R4 (10.4.5.0/24)
-!  e0/3 = to R3 (10.3.5.0/24)
-!  Peer-group PG5: all clients are route-reflector-clients
+!  Peer-group PG5: all clients are RR clients
 ! ==========================================================
 hostname R5
 !
 interface Loopback0
  ip address 5.5.5.5 255.255.255.255
+ ip ospf 100 area 0
 !
 interface Ethernet0/0
  ip address 10.2.5.5 255.255.255.0
+ ip ospf 100 area 0
  no shutdown
 interface Ethernet0/1
  ip address 10.1.5.5 255.255.255.0
+ ip ospf 100 area 0
  no shutdown
 interface Ethernet0/2
  ip address 10.4.5.5 255.255.255.0
  no shutdown
 interface Ethernet0/3
  ip address 10.3.5.5 255.255.255.0
+ ip ospf 100 area 0
  no shutdown
-!
-router ospf 100
- network 0.0.0.0 0.0.0.0 area 0
 !
 router bgp 100
  neighbor PG5 peer-group

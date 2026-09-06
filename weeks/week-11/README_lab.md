@@ -40,7 +40,7 @@ The RR **reflects** routes from one client to all other clients, bypassing the s
 
 ---
 
-## Topology
+## IOU Topology
 
 ![Topology](Topology.png)
 
@@ -150,8 +150,6 @@ R1# show ip bgp 192.168.2.1/32
 ! Originator: 2.2.2.2 (R2 originated it)
 ! Cluster-list: 4.4.4.4 (or 5.5.5.5) — proves RR reflected it
 ```
-![alt text](image-5.png)
-
 
 ### 5. BGP routes in the routing table (no RIB-failure)
 ```
@@ -159,7 +157,6 @@ R1# show ip route bgp
 ! Should see B (BGP) routes for 192.168.2.1 and 192.168.3.1
 ! No 'r' flag because OSPF doesn't carry these prefixes
 ```
-![alt text](image-6.png)
 
 ---
 

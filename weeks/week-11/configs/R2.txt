@@ -1,25 +1,23 @@
 ! ==========================================================
-!  R2 - iBGP client (AS 100)  [AS-BUILT, final]
-!  e0/0 = to R5 (10.2.5.0/24)
-!  e0/1 = to R4 (10.2.4.0/24)
-!  Peer-group PG3: peers with both RRs
+!  R2 - iBGP client (AS 100)  [AS-BUILT, final v4]
+!  BUG FIXED: mask was 255.255.255.1 (invalid), corrected to /32
 ! ==========================================================
 hostname R2
 !
 interface Loopback0
  ip address 2.2.2.2 255.255.255.255
+ ip ospf 100 area 0
 interface Loopback100
- ip address 20.2.2.2 255.255.255.255
+ ip address 192.168.2.1 255.255.255.255
 !
 interface Ethernet0/0
  ip address 10.2.5.2 255.255.255.0
+ ip ospf 100 area 0
  no shutdown
 interface Ethernet0/1
  ip address 10.2.4.2 255.255.255.0
+ ip ospf 100 area 0
  no shutdown
-!
-router ospf 100
- network 0.0.0.0 0.0.0.0 area 0
 !
 router bgp 100
  neighbor PG3 peer-group
@@ -27,7 +25,6 @@ router bgp 100
  neighbor PG3 update-source Loopback0
  neighbor 4.4.4.4 peer-group PG3
  neighbor 5.5.5.5 peer-group PG3
- network 2.2.2.2 mask 255.255.255.255
- network 20.2.2.2 mask 255.255.255.255
+ network 192.168.2.1 mask 255.255.255.255
 !
 end
