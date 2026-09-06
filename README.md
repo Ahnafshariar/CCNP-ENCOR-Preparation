@@ -56,50 +56,56 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 <!-- TOPOLOGY:START -->
 **Currently shown: [Lab 11 — iBGP with Dual Route Reflectors](labs/lab-11-ibgp-route-reflector/)**
 
+![Topology](Topology.png)
+
 ```
-                     [ R4 ] RR #1
-                   /    |
-                 /      |  (10.4.5.0/24)
-               /        |
-  [ R1 ] ----    [ R5 ] RR #2   ---- [ R3 ]
-    |    \      / |  \                   |
-    |      \  /   |    \                 |
-    |       \/    |     \                |
-    |       /\    |      \               |
-    |     /    \  |       \              |
-  [ R2 ] ----   peer-group RR2
+                     [ R4 ] RR #1 (PG4)
+                   / |   \
+                 /   |     \
+               /     |       \
+  [ R1 ] ----   [ R2 ]   [ R3 ] ---- [ R5 ] RR #2 (PG5)
+    |    \      /    |         \    /    |
+    |     \   /      |          \/      |
+    |      \/        |          /\      |
+    |      /\        |        /    \    |
+    |    /    \      |      /        \  |
+  (PG3)   (PG3) (PG3)  (PG3)    (PG3) (PG3)
 
   All in AS 100.  OSPF 100 area 0 for reachability.
-  R1, R2, R3 = RR clients (peer with both R4 and R5)
-  R4 = RR #1 (individual neighbor statements)
-  R5 = RR #2 (peer-group for cleaner config)
+  R1, R2, R3 = RR clients (peer with both R4 and R5 via PG3)
+  R4 = RR #1 (reflects via PG4)
+  R5 = RR #2 (reflects via PG5)
 ```
 
 ## Addressing
 
-| Device | Interface | IP | Connects to |
-|--------|-----------|------|-------------|
-| R1 | e0/0 | 10.1.4.1/24 | R4 |
-| R1 | e0/1 | 10.1.5.1/24 | R5 |
-| R1 | Lo0 | 1.1.1.1/32 | BGP source |
-| R1 | Lo100 | 10.1.1.1/32 | Advertised into BGP |
-| R2 | e0/0 | 10.2.5.2/24 | R5 |
-| R2 | e0/1 | 10.2.4.2/24 | R4 |
-| R2 | Lo0 | 2.2.2.2/32 | BGP source |
-| R2 | Lo100 | 20.2.2.2/32 | Advertised into BGP |
-| R3 | e0/2 | 10.3.4.3/24 | R4 |
-| R3 | e0/3 | 10.3.5.3/24 | R5 |
-| R3 | Lo0 | 3.3.3.3/32 | BGP source |
-| R3 | Lo100 | 30.3.3.3/32 | Advertised into BGP |
-| R4 | e0/0 | 10.1.4.4/24 | R1 |
-| R4 | e0/1 | 10.4.5.4/24 | R5 |
-| R4 | e0/2 | 10.2.4.4/24 | R2 |
-| R4 | Lo0 | 4.4.4.4/32 | BGP source |
-| R5 | e0/0 | 10.2.5.5/24 | R2 |
-| R5 | e0/1 | 10.1.5.5/24 | R1 |
-| R5 | e0/2 | 10.4.5.5/24 | R4 |
-| R5 | e0/3 | 10.3.5.5/24 | R3 |
-| R5 | Lo0 | 5.5.5.5/32 | BGP source |
+| Device | Interface | IP | Protocol | Purpose |
+|--------|-----------|------|----------|---------|
+| R1 | e0/0 | 10.1.4.1/24 | OSPF area 0 | To R4 |
+| R1 | e0/1 | 10.1.5.1/24 | OSPF area 0 | To R5 |
+| R1 | Lo0 | 1.1.1.1/32 | OSPF area 0 | BGP source |
+| R1 | Lo100 | 192.168.1.1/32 | BGP only | Advertised into BGP |
+| R1 | Lo101 | 192.168.11.1/32 | BGP only | Advertised into BGP |
+| R2 | e0/0 | 10.2.5.2/24 | OSPF area 0 | To R5 |
+| R2 | e0/1 | 10.2.4.2/24 | OSPF area 0 | To R4 |
+| R2 | Lo0 | 2.2.2.2/32 | OSPF area 0 | BGP source |
+| R2 | Lo100 | 192.168.2.1/32 | BGP only | Advertised into BGP |
+| R3 | e0/2 | 10.3.4.3/24 | OSPF area 0 | To R4 |
+| R3 | e0/3 | 10.3.5.3/24 | OSPF area 0 | To R5 |
+| R3 | Lo0 | 3.3.3.3/32 | OSPF area 0 | BGP source |
+| R3 | Lo100 | 192.168.3.1/32 | BGP only | Advertised into BGP |
+| R4 | e0/0 | 10.1.4.4/24 | OSPF area 0 | To R1 |
+| R4 | e0/1 | 10.2.4.4/24 | OSPF area 0 | To R2 |
+| R4 | e0/2 | 10.3.4.4/24 | OSPF area 0 | To R3 |
+| R4 | e0/3 | 10.4.5.4/24 | - | To R5 |
+| R4 | Lo0 | 4.4.4.4/32 | OSPF area 0 | BGP source |
+| R5 | e0/0 | 10.2.5.5/24 | OSPF area 0 | To R2 |
+| R5 | e0/1 | 10.1.5.5/24 | OSPF area 0 | To R1 |
+| R5 | e0/2 | 10.4.5.5/24 | - | To R4 |
+| R5 | e0/3 | 10.3.5.5/24 | OSPF area 0 | To R3 |
+| R5 | Lo0 | 5.5.5.5/32 | OSPF area 0 | BGP source |
+
+**Design note:** Service loopbacks (Lo100, Lo101) are intentionally **NOT in OSPF**. This prevents RIB-failure (`r` flag) — OSPF (AD 110) would beat iBGP (AD 200) for the same prefix. By keeping them out of OSPF, BGP is the only protocol that carries these routes.
 
 ---
 
