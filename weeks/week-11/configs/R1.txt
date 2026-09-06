@@ -1,0 +1,35 @@
+! ==========================================================
+!  R1 - iBGP client (AS 100)  [AS-BUILT, final]
+!  e0/0 = to R4 (10.1.4.0/24)
+!  e0/1 = to R5 (10.1.5.0/24)
+!  Lo0 = 1.1.1.1 (BGP source + advertised)
+!  Lo100 = 10.1.1.1 (advertised into BGP)
+!  Peer-group PG3: peers with both RRs (R4 + R5)
+! ==========================================================
+hostname R1
+!
+interface Loopback0
+ ip address 1.1.1.1 255.255.255.255
+interface Loopback100
+ ip address 10.1.1.1 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.1.4.1 255.255.255.0
+ no shutdown
+interface Ethernet0/1
+ ip address 10.1.5.1 255.255.255.0
+ no shutdown
+!
+router ospf 100
+ network 0.0.0.0 0.0.0.0 area 0
+!
+router bgp 100
+ neighbor PG3 peer-group
+ neighbor PG3 remote-as 100
+ neighbor PG3 update-source Loopback0
+ neighbor 4.4.4.4 peer-group PG3
+ neighbor 5.5.5.5 peer-group PG3
+ network 1.1.1.1 mask 255.255.255.255
+ network 10.1.1.1 mask 255.255.255.255
+!
+end
