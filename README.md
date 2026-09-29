@@ -54,60 +54,33 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 11 — iBGP with Dual Route Reflectors](labs/lab-11-ibgp-route-reflector/)**
-
-![Topology](Topology.png)
+**Currently shown: [Lab 12 - eBGP + iBGP Combined (12 Routers)](labs/lab-12-ebgp-ibgp-combined/)**
 
 ```
-                     [ R4 ] RR #1 (PG4)
-                   / |   \
-                 /   |     \
-               /     |       \
-  [ R1 ] ----   [ R2 ]   [ R3 ] ---- [ R5 ] RR #2 (PG5)
-    |    \      /    |         \    /    |
-    |     \   /      |          \/      |
-    |      \/        |          /\      |
-    |      /\        |        /    \    |
-    |    /    \      |      /        \  |
-  (PG3)   (PG3) (PG3)  (PG3)    (PG3) (PG3)
+                        AS 100 (iBGP Core)
+              +-------+-------+-------+-------+
+              |       |       |       |       |
+            [R1]   [R2]    [R3]    [R4-RR]  [R5-RR]
+           Lo0:    Lo0:   Lo0:    Lo0:      Lo0:
+          1.1.1.1 2.2.2.2 3.3.3.3 4.4.4.4  5.5.5.5
 
-  All in AS 100.  OSPF 100 area 0 for reachability.
-  R1, R2, R3 = RR clients (peer with both R4 and R5 via PG3)
-  R4 = RR #1 (reflects via PG4)
-  R5 = RR #2 (reflects via PG5)
+    R1 e0/0 --- e0/0 R4     R1 e0/1 --- e0/1 R5
+    R2 e0/1 --- e0/1 R4     R2 e0/0 --- e0/0 R5
+    R3 e0/2 --- e0/2 R4     R3 e0/3 --- e0/3 R5
+                             R4 e0/3 --- e0/2 R5
+
+    iBGP clients (R1,R2,R3) peer to both RRs via Loopback 0
+    R4 and R5 use peer-group RR2 with route-reflector-client + next-hop-self
+
+                  Top Chain (eBGP)               Bottom Chain (eBGP)
+    R4 e1/0 --- e0/0 R6 (AS 600)      R5 e1/0 --- e0/0 R7 (AS 700)
+    R6 e0/1 --- e0/1 R8 (AS 800)      R7 e0/1 --- e0/1 R9 (AS 900)
+    R8 e0/0 --- e0/0 R10 (AS 1000)    R9 e0/0 --- e0/0 R11 (AS 1100)
+    R10 e0/1 --- e0/1 R12 (AS 1200)   R11 e0/2 --- e0/2 R12 (AS 1200)
+
+    Both chains converge at R12 (AS 1200)
+    R12 advertises 12.12.12.12/32 via Loopback 100
 ```
-
-## Addressing
-
-| Device | Interface | IP | Protocol | Purpose |
-|--------|-----------|------|----------|---------|
-| R1 | e0/0 | 10.1.4.1/24 | OSPF area 0 | To R4 |
-| R1 | e0/1 | 10.1.5.1/24 | OSPF area 0 | To R5 |
-| R1 | Lo0 | 1.1.1.1/32 | OSPF area 0 | BGP source |
-| R1 | Lo100 | 192.168.1.1/32 | BGP only | Advertised into BGP |
-| R1 | Lo101 | 192.168.11.1/32 | BGP only | Advertised into BGP |
-| R2 | e0/0 | 10.2.5.2/24 | OSPF area 0 | To R5 |
-| R2 | e0/1 | 10.2.4.2/24 | OSPF area 0 | To R4 |
-| R2 | Lo0 | 2.2.2.2/32 | OSPF area 0 | BGP source |
-| R2 | Lo100 | 192.168.2.1/32 | BGP only | Advertised into BGP |
-| R3 | e0/2 | 10.3.4.3/24 | OSPF area 0 | To R4 |
-| R3 | e0/3 | 10.3.5.3/24 | OSPF area 0 | To R5 |
-| R3 | Lo0 | 3.3.3.3/32 | OSPF area 0 | BGP source |
-| R3 | Lo100 | 192.168.3.1/32 | BGP only | Advertised into BGP |
-| R4 | e0/0 | 10.1.4.4/24 | OSPF area 0 | To R1 |
-| R4 | e0/1 | 10.2.4.4/24 | OSPF area 0 | To R2 |
-| R4 | e0/2 | 10.3.4.4/24 | OSPF area 0 | To R3 |
-| R4 | e0/3 | 10.4.5.4/24 | - | To R5 |
-| R4 | Lo0 | 4.4.4.4/32 | OSPF area 0 | BGP source |
-| R5 | e0/0 | 10.2.5.5/24 | OSPF area 0 | To R2 |
-| R5 | e0/1 | 10.1.5.5/24 | OSPF area 0 | To R1 |
-| R5 | e0/2 | 10.4.5.5/24 | - | To R4 |
-| R5 | e0/3 | 10.3.5.5/24 | OSPF area 0 | To R3 |
-| R5 | Lo0 | 5.5.5.5/32 | OSPF area 0 | BGP source |
-
-**Design note:** Service loopbacks (Lo100, Lo101) are intentionally **NOT in OSPF**. This prevents RIB-failure (`r` flag) — OSPF (AD 110) would beat iBGP (AD 200) for the same prefix. By keeping them out of OSPF, BGP is the only protocol that carries these routes.
-
----
 
 *Each lab folder documents its own topology, so the full history stays intact as the network grows.*
 <!-- TOPOLOGY:END -->
@@ -137,7 +110,8 @@ CCNP-ENCOR-Preparation/
 │   ├── lab-08-isis/
 │   ├── lab-09-redistribution-filtering/
 │   ├── lab-10-ebgp/
-│   └── lab-11-ibgp-route-reflector/
+│   ├── lab-11-ibgp-route-reflector/
+│   └── lab-12-ebgp-ibgp-combined/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -186,6 +160,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 09 — Redistribution Filtering (Distribute-List, Route-Map, Prefix-List, Route Tags)](labs/lab-09-redistribution-filtering/) | 3.0 Infrastructure |
 | [Lab 10 — eBGP with Loopback Peering & Multihop](labs/lab-10-ebgp/) | 3.0 Infrastructure |
 | [Lab 11 — iBGP with Dual Route Reflectors](labs/lab-11-ibgp-route-reflector/) | 3.0 Infrastructure |
+| [Lab 12 - eBGP + iBGP Combined (12 Routers)](labs/lab-12-ebgp-ibgp-combined/) | — |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added.*
