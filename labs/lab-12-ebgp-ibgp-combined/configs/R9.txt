@@ -1,0 +1,16 @@
+en
+conf t
+
+hostname R9
+
+int e0/0
+ip add 10.9.11.9 255.255.255.0
+no sh
+
+int e0/1
+ip add 10.7.9.9 255.255.255.0
+no sh
+
+router bgp 900
+neighbor 10.7.9.7 remote-as 700
+neighbor 10.9.11.11 remote-as 1100

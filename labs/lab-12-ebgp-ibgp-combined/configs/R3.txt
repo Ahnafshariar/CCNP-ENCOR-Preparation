@@ -1,0 +1,29 @@
+en
+conf t
+
+hostname R3
+
+int e0/2
+ip add 10.3.4.3 255.255.255.0
+no sh
+
+int e0/3
+ip add 10.3.5.3 255.255.255.0
+no sh
+
+int loopback 0
+ip add 3.3.3.3 255.255.255.255
+
+int loopback 100
+ip add 30.3.3.3 255.255.255.255
+
+router ospf 100
+network 0.0.0.0 0.0.0.0 area 0
+
+router bgp 100
+neighbor 4.4.4.4 remote-as 100
+neighbor 4.4.4.4 update-source loopback 0
+neighbor 5.5.5.5 remote-as 100
+neighbor 5.5.5.5 update-source loopback 0
+network 3.3.3.3 mask 255.255.255.255
+network 30.3.3.3 mask 255.255.255.255

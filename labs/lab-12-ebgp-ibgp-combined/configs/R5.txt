@@ -1,0 +1,42 @@
+en
+conf t
+
+hostname R5
+
+int e0/0
+ip add 10.2.5.5 255.255.255.0
+no sh
+
+int e0/1
+ip add 10.1.5.5 255.255.255.0
+no sh
+
+int e0/2
+ip add 10.4.5.5 255.255.255.0
+no sh
+
+int e0/3
+ip add 10.3.5.5 255.255.255.0
+no sh
+
+int e1/0
+ip add 10.5.7.5 255.255.255.0
+no sh
+
+int loopback 0
+ip add 5.5.5.5 255.255.255.255
+
+router ospf 100
+network 0.0.0.0 0.0.0.0 area 0
+
+router bgp 100
+neighbor RR2 peer-group
+neighbor RR2 remote-as 100
+neighbor RR2 update-source loopback 0
+neighbor RR2 route-reflector-client
+neighbor RR2 next-hop-self
+neighbor 1.1.1.1 peer-group RR2
+neighbor 2.2.2.2 peer-group RR2
+neighbor 3.3.3.3 peer-group RR2
+neighbor 10.5.7.7 remote-as 700
+network 5.5.5.5 mask 255.255.255.255

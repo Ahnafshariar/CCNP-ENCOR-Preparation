@@ -1,0 +1,19 @@
+en
+conf t
+
+hostname R7
+
+int e0/0
+ip add 10.5.7.7 255.255.255.0
+no sh
+
+int e0/1
+ip add 10.7.9.7 255.255.255.0
+no sh
+
+int loopback 0
+ip add 7.7.7.7 255.255.255.255
+
+router bgp 700
+neighbor 10.5.7.5 remote-as 100
+neighbor 10.7.9.9 remote-as 900

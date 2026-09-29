@@ -1,0 +1,28 @@
+en
+conf t
+
+hostname R2
+
+int e0/1
+ip add 10.2.4.2 255.255.255.0
+no sh
+
+int e0/0
+ip add 10.2.5.2 255.255.255.0
+no sh
+
+int loopback 0
+ip add 2.2.2.2 255.255.255.255
+
+int loopback 100
+ip add 20.2.2.2 255.255.255.255
+
+router ospf 100
+network 0.0.0.0 0.0.0.0 area 0
+
+router bgp 100
+neighbor 4.4.4.4 remote-as 100
+neighbor 4.4.4.4 update-source loopback 0
+neighbor 5.5.5.5 remote-as 100
+neighbor 5.5.5.5 update-source loopback 0
+network 20.2.2.2 mask 255.255.255.255

@@ -1,0 +1,20 @@
+en
+conf t
+
+hostname R6
+
+int e0/0
+ip add 10.4.6.6 255.255.255.0
+no sh
+
+int e0/1
+ip add 10.6.8.6 255.255.255.0
+no sh
+
+int loopback 0
+ip add 6.6.6.6 255.255.255.255
+
+router bgp 600
+neighbor 10.4.6.4 remote-as 100
+neighbor 10.6.8.8 remote-as 800
+network 6.6.6.6 mask 255.255.255.255

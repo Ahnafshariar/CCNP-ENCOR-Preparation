@@ -1,0 +1,16 @@
+en
+conf t
+
+hostname R10
+
+int e0/0
+ip add 10.8.10.10 255.255.255.0
+no sh
+
+int e0/1
+ip add 10.10.12.10 255.255.255.0
+no sh
+
+router bgp 1000
+neighbor 10.8.10.8 remote-as 800
+neighbor 10.10.12.12 remote-as 1200
