@@ -1,0 +1,59 @@
+hostname R4
+
+int e0/0
+ ip address 10.3.4.4 255.255.255.0
+ no shut
+
+int e0/1
+ ip address 10.4.5.4 255.255.255.0
+ no shut
+
+int e0/2
+ ip address 10.14.0.4 255.255.255.0
+ no shut
+
+ip community-list 1 permit 1:1
+ip community-list 2 permit 2:2
+
+ip bgp-community new-format
+
+route-map From-R5 permit 10
+ match community 1
+ set local-preference 200
+
+route-map From-R5 permit 20
+ match community 2
+ set local-preference 50
+
+route-map From-R5 permit 30
+
+route-map From-R3 permit 10
+ match community 1
+ set local-preference 50
+
+route-map From-R3 permit 20
+ match community 2
+ set local-preference 200
+
+route-map From-R3 permit 30
+
+route-map From-R1 permit 10
+ match community 1
+ set local-preference 50
+
+route-map From-R1 permit 20
+ match community 2
+ set local-preference 200
+
+route-map From-R1 permit 30
+
+router bgp 400
+ neighbor 10.3.4.3 remote-as 300
+ neighbor 10.4.5.5 remote-as 500
+ neighbor 10.14.0.1 remote-as 100
+ neighbor 10.3.4.3 send-community both
+ neighbor 10.4.5.5 send-community both
+ neighbor 10.14.0.1 send-community both
+ neighbor 10.3.4.3 route-map From-R3 in
+ neighbor 10.4.5.5 route-map From-R5 in
+ neighbor 10.14.0.1 route-map From-R1 in

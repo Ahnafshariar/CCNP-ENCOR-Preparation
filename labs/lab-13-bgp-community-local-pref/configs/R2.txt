@@ -1,0 +1,17 @@
+hostname R2
+
+int e0/0
+ ip address 10.1.2.2 255.255.255.0
+ no shut
+
+int e0/1
+ ip address 10.2.6.2 255.255.255.0
+ no shut
+
+ip bgp-community new-format
+
+router bgp 200
+ neighbor 10.1.2.1 remote-as 100
+ neighbor 10.2.6.6 remote-as 600
+ neighbor 10.1.2.1 send-community both
+ neighbor 10.2.6.6 send-community both

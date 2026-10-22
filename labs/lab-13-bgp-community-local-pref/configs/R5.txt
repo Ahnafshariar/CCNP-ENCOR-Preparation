@@ -1,0 +1,43 @@
+hostname R5
+
+int e0/0
+ ip address 10.4.5.5 255.255.255.0
+ no shut
+
+int e0/1
+ ip address 10.1.5.5 255.255.255.0
+ no shut
+
+int loopback 100
+ ip address 5.5.5.10 255.255.255.255
+
+int loopback 101
+ ip address 5.5.6.10 255.255.255.255
+
+int loopback 102
+ ip address 5.5.7.10 255.255.255.255
+
+int loopback 103
+ ip address 5.5.8.10 255.255.255.255
+
+access-list 10 permit 5.5.5.0 0.0.0.255
+access-list 10 permit 5.5.6.0 0.0.0.255
+access-list 20 permit 5.5.7.0 0.0.0.255
+access-list 20 permit 5.5.8.0 0.0.0.255
+
+ip bgp-community new-format
+
+route-map lab-community permit 10
+ match ip address 10
+ set community 1:1
+
+route-map lab-community permit 20
+ match ip address 20
+ set community 2:2
+
+router bgp 500
+ neighbor 10.4.5.4 remote-as 400
+ neighbor 10.1.5.1 remote-as 100
+ neighbor 10.4.5.4 send-community both
+ neighbor 10.1.5.1 send-community both
+ redistribute connected route-map lab-community
