@@ -54,32 +54,34 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 12 - eBGP + iBGP Combined (12 Routers)](labs/lab-12-ebgp-ibgp-combined/)**
+**Currently shown: [Lab 13 - BGP Communities + Local Preference (6 Routers)](labs/lab-13-bgp-community-local-pref/)**
 
 ```
-                        AS 100 (iBGP Core)
-              +-------+-------+-------+-------+
-              |       |       |       |       |
-            [R1]   [R2]    [R3]    [R4-RR]  [R5-RR]
-           Lo0:    Lo0:   Lo0:    Lo0:      Lo0:
-          1.1.1.1 2.2.2.2 3.3.3.3 4.4.4.4  5.5.5.5
+           R5 (AS 500) - Community Source
+          /            \
+    e0/1(10.1.5.1)   e0/0(10.4.5.4)
+         |                |
+    e0/1(10.1.5.5)   e0/1(10.4.5.5)
+   R1 (AS 100) ------  R4 (AS 400)
+   e0/2(10.14.0.1)   e0/2(10.14.0.4)
+      |                    |
+   e0/0(10.1.2.1)     e0/0(10.3.4.4)
+      |                    |
+   e0/0(10.1.2.2)     e0/1(10.3.4.3)
+   R2 (AS 200)        R3 (AS 300)
+   e0/1(10.2.6.2)     e0/0(10.3.6.3)
+         \            /
+    e0/0(10.2.6.6)  e0/1(10.3.6.6)
+          R6 (AS 600)
 
-    R1 e0/0 --- e0/0 R4     R1 e0/1 --- e0/1 R5
-    R2 e0/1 --- e0/1 R4     R2 e0/0 --- e0/0 R5
-    R3 e0/2 --- e0/2 R4     R3 e0/3 --- e0/3 R5
-                             R4 e0/3 --- e0/2 R5
+   Ring path:  R1 - R2 - R6 - R3 - R4 - R5 - R1
+   Direct:     R1 - R4 (cross-link for dual-path selection)
 
-    iBGP clients (R1,R2,R3) peer to both RRs via Loopback 0
-    R4 and R5 use peer-group RR2 with route-reflector-client + next-hop-self
+   R5 tags prefixes with communities:
+     Community 1:1 -> 5.5.5.10, 5.5.6.10
+     Community 2:2 -> 5.5.7.10, 5.5.8.10
 
-                  Top Chain (eBGP)               Bottom Chain (eBGP)
-    R4 e1/0 --- e0/0 R6 (AS 600)      R5 e1/0 --- e0/0 R7 (AS 700)
-    R6 e0/1 --- e0/1 R8 (AS 800)      R7 e0/1 --- e0/1 R9 (AS 900)
-    R8 e0/0 --- e0/0 R10 (AS 1000)    R9 e0/0 --- e0/0 R11 (AS 1100)
-    R10 e0/1 --- e0/1 R12 (AS 1200)   R11 e0/2 --- e0/2 R12 (AS 1200)
-
-    Both chains converge at R12 (AS 1200)
-    R12 advertises 12.12.12.12/32 via Loopback 100
+   R1 and R4 use local-preference to select paths based on community.
 ```
 
 *Each lab folder documents its own topology, so the full history stays intact as the network grows.*
@@ -111,7 +113,8 @@ CCNP-ENCOR-Preparation/
 │   ├── lab-09-redistribution-filtering/
 │   ├── lab-10-ebgp/
 │   ├── lab-11-ibgp-route-reflector/
-│   └── lab-12-ebgp-ibgp-combined/
+│   ├── lab-12-ebgp-ibgp-combined/
+│   └── lab-13-bgp-community-local-pref/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -161,6 +164,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 10 — eBGP with Loopback Peering & Multihop](labs/lab-10-ebgp/) | 3.0 Infrastructure |
 | [Lab 11 — iBGP with Dual Route Reflectors](labs/lab-11-ibgp-route-reflector/) | 3.0 Infrastructure |
 | [Lab 12 - eBGP + iBGP Combined (12 Routers)](labs/lab-12-ebgp-ibgp-combined/) | — |
+| [Lab 13 - BGP Communities + Local Preference (6 Routers)](labs/lab-13-bgp-community-local-pref/) | — |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added.*
