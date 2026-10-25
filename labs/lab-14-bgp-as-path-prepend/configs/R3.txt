@@ -1,0 +1,13 @@
+hostname R3
+
+int e0/0
+ ip address 10.1.3.3 255.255.255.0
+ no shut
+
+int e0/1
+ ip address 10.3.4.3 255.255.255.0
+ no shut
+
+router bgp 300
+ neighbor 10.1.3.1 remote-as 100
+ neighbor 10.3.4.4 remote-as 400
