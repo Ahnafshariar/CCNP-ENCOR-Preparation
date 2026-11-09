@@ -54,34 +54,28 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 13 - BGP Communities + Local Preference (6 Routers)](labs/lab-13-bgp-community-local-pref/)**
+**Currently shown: [Lab 14 - BGP AS-PATH Prepend (4 Routers)](labs/lab-14-bgp-as-path-prepend/)**
 
 ```
-           R5 (AS 500) - Community Source
-          /            \
-    e0/1(10.1.5.1)   e0/0(10.4.5.4)
-         |                |
-    e0/1(10.1.5.5)   e0/1(10.4.5.5)
-   R1 (AS 100) ------  R4 (AS 400)
-   e0/2(10.14.0.1)   e0/2(10.14.0.4)
-      |                    |
-   e0/0(10.1.2.1)     e0/0(10.3.4.4)
-      |                    |
-   e0/0(10.1.2.2)     e0/1(10.3.4.3)
-   R2 (AS 200)        R3 (AS 300)
-   e0/1(10.2.6.2)     e0/0(10.3.6.3)
-         \            /
-    e0/0(10.2.6.6)  e0/1(10.3.6.6)
-          R6 (AS 600)
+        R1 (AS 100) - Observer / Customer
+       /             \
+  e0/0(10.1.2.1)   e0/1(10.1.3.1)
+      |                |
+  e0/0(10.1.2.2)   e0/0(10.1.3.3)
+      |                |
+   R2 (AS 200)     R3 (AS 300)
+   ISP-A            ISP-B
+      |                |
+  e0/1(10.2.4.2)   e0/1(10.3.4.3)
+      |                |
+  e0/0(10.2.4.4)   e0/1(10.3.4.4)
+        R4 (AS 400) - Dual-homed, prepends here
+        Lo10: 4.4.4.4/32 (YouTube / Web traffic)
+        Lo20: 4.4.5.4/32 (Gaming traffic)
 
-   Ring path:  R1 - R2 - R6 - R3 - R4 - R5 - R1
-   Direct:     R1 - R4 (cross-link for dual-path selection)
-
-   R5 tags prefixes with communities:
-     Community 1:1 -> 5.5.5.10, 5.5.6.10
-     Community 2:2 -> 5.5.7.10, 5.5.8.10
-
-   R1 and R4 use local-preference to select paths based on community.
+   R4 uses selective AS-PATH prepend to steer inbound traffic:
+     YouTube (4.4.4.4) -> arrives via R2 (ISP-A)
+     Gaming  (4.4.5.4) -> arrives via R3 (ISP-B)
 ```
 
 *Each lab folder documents its own topology, so the full history stays intact as the network grows.*
@@ -114,7 +108,8 @@ CCNP-ENCOR-Preparation/
 │   ├── lab-10-ebgp/
 │   ├── lab-11-ibgp-route-reflector/
 │   ├── lab-12-ebgp-ibgp-combined/
-│   └── lab-13-bgp-community-local-pref/
+│   ├── lab-13-bgp-community-local-pref/
+│   └── lab-14-bgp-as-path-prepend/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -165,6 +160,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 11 — iBGP with Dual Route Reflectors](labs/lab-11-ibgp-route-reflector/) | 3.0 Infrastructure |
 | [Lab 12 - eBGP + iBGP Combined (12 Routers)](labs/lab-12-ebgp-ibgp-combined/) | — |
 | [Lab 13 - BGP Communities + Local Preference (6 Routers)](labs/lab-13-bgp-community-local-pref/) | — |
+| [Lab 14 - BGP AS-PATH Prepend (4 Routers)](labs/lab-14-bgp-as-path-prepend/) | — |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added.*
