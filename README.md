@@ -54,29 +54,41 @@ This is my **public study record** for the Cisco CCNP ENCOR (350-401 v1.2) exam 
 > 🔁 This topology **evolves as the labs progress** — the section below auto-updates from the latest lab via CI.
 
 <!-- TOPOLOGY:START -->
-**Currently shown: [Lab 14 - BGP AS-PATH Prepend (4 Routers)](labs/lab-14-bgp-as-path-prepend/)**
+**Currently shown: [Lab 15 - BGP Route Aggregation with Null Route and Prefix-List Filtering (5 Routers)](labs/lab-15-bgp-route-aggregation/)**
 
 ```
-        R1 (AS 100) - Observer / Customer
-       /             \
-  e0/0(10.1.2.1)   e0/1(10.1.3.1)
-      |                |
-  e0/0(10.1.2.2)   e0/0(10.1.3.3)
-      |                |
-   R2 (AS 200)     R3 (AS 300)
-   ISP-A            ISP-B
-      |                |
-  e0/1(10.2.4.2)   e0/1(10.3.4.3)
-      |                |
-  e0/0(10.2.4.4)   e0/1(10.3.4.4)
-        R4 (AS 400) - Dual-homed, prepends here
-        Lo10: 4.4.4.4/32 (YouTube / Web traffic)
-        Lo20: 4.4.5.4/32 (Gaming traffic)
-
-   R4 uses selective AS-PATH prepend to steer inbound traffic:
-     YouTube (4.4.4.4) -> arrives via R2 (ISP-A)
-     Gaming  (4.4.5.4) -> arrives via R3 (ISP-B)
+  R1 (AS 10)        R2 (AS 20)        R3 (AS 30)
+  Lo100: .11        Lo100: .12        Lo100: .13
+     |                  |                  |
+  e0/0              e0/0              e0/0
+ 10.1.4.1          10.1.4.9         10.1.4.17
+     |                  |                  |
+ 10.1.4.2         10.1.4.10        10.1.4.18
+  e0/0              e0/1              e0/2
+      \                 |                /
+       --------- R4 (AS 40) ---------
+               ISP / Aggregator
+            Null route: 11.111.111.0/24
+            Prefix-list: only /24 out
+                     |
+               e0/3 (11.1.1.1)
+                     |
+               e0/0 (11.1.1.2)
+                R5 (AS 50)
+             Upstream ISP
+          Prefix-list: reject /25-/32
+                       reject default
+                       accept /0-/24
 ```
+
+All loopbacks fall within 11.111.111.0/24:
+- R1: 11.111.111.11/32
+- R2: 11.111.111.12/32
+- R3: 11.111.111.13/32
+
+R4 aggregates these into a single /24 advertisement upstream.
+
+---
 
 *Each lab folder documents its own topology, so the full history stays intact as the network grows.*
 <!-- TOPOLOGY:END -->
@@ -109,7 +121,8 @@ CCNP-ENCOR-Preparation/
 │   ├── lab-11-ibgp-route-reflector/
 │   ├── lab-12-ebgp-ibgp-combined/
 │   ├── lab-13-bgp-community-local-pref/
-│   └── lab-14-bgp-as-path-prepend/
+│   ├── lab-14-bgp-as-path-prepend/
+│   └── lab-15-bgp-route-aggregation/
 ├── notes/
 │   ├── 01-architecture/
 │   ├── 02-virtualization/
@@ -161,6 +174,7 @@ Each lab folder is self-contained: **objective → topology → addressing → c
 | [Lab 12 - eBGP + iBGP Combined (12 Routers)](labs/lab-12-ebgp-ibgp-combined/) | — |
 | [Lab 13 - BGP Communities + Local Preference (6 Routers)](labs/lab-13-bgp-community-local-pref/) | — |
 | [Lab 14 - BGP AS-PATH Prepend (4 Routers)](labs/lab-14-bgp-as-path-prepend/) | — |
+| [Lab 15 - BGP Route Aggregation with Null Route and Prefix-List Filtering (5 Routers)](labs/lab-15-bgp-route-aggregation/) | — |
 <!-- LAB-INDEX:END -->
 
 *↑ This table is regenerated automatically by CI whenever a lab is added.*
