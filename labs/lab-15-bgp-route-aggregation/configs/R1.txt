@@ -1,0 +1,12 @@
+hostname R1
+
+int e0/0
+ ip address 10.1.4.1 255.255.255.248
+ no shut
+
+int loopback 100
+ ip address 11.111.111.11 255.255.255.255
+
+router bgp 10
+ neighbor 10.1.4.2 remote-as 40
+ network 11.111.111.11 mask 255.255.255.255

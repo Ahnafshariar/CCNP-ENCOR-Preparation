@@ -1,0 +1,13 @@
+hostname R5
+
+int e0/0
+ ip address 11.1.1.2 255.255.255.252
+ no shut
+
+ip prefix-list From-ISP-IN seq 5 deny 0.0.0.0/0
+ip prefix-list From-ISP-IN seq 10 deny 0.0.0.0/0 ge 25 le 32
+ip prefix-list From-ISP-IN seq 15 permit 0.0.0.0/0 le 24
+
+router bgp 50
+ neighbor 11.1.1.1 remote-as 40
+ neighbor 11.1.1.1 prefix-list From-ISP-IN in
